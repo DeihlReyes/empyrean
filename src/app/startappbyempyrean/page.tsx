@@ -2,7 +2,7 @@ import { ContentCard } from "@/components/content-card";
 import CustomSolutions from "@/components/custom-solutions";
 import { Metadata } from "next";
 import Script from "next/script";
-import Image from "next/image";
+import ScrollScaleIcon from "@/components/ScrollScaleIcon";
 
 export const metadata: Metadata = {
   title: "Start App by Empyrean | Empyrean Real Estate Solutions",
@@ -39,12 +39,14 @@ export default function BrokerAgentDeveloperPage() {
         {/* Branding Section */}
         <section className="mb-4">
           <div className="flex justify-center mt-2">
-            <Image
+            <ScrollScaleIcon
               src="/assets/startappicon.png"
               alt="Start App by Empyrean"
               width={480}
               height={480}
               priority
+              maxScaleIncrease={0.06}
+              scrollRangePx={420}
               className="
                 w-72 md:w-96 lg:w-[420px] h-auto
                 drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
@@ -139,6 +141,7 @@ export default function BrokerAgentDeveloperPage() {
           <h2 className="text-2xl font-bold text-center mb-6">
             Frequently Asked Questions
           </h2>
+
           <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify">
             <p>
               <strong>
@@ -232,7 +235,10 @@ export default function BrokerAgentDeveloperPage() {
               "Property Leasing",
               "Property Sales",
             ],
-            areaServed: { "@type": "Country", name: "Philippines" },
+            areaServed: {
+              "@type": "Country",
+              name: "Philippines",
+            },
           }),
         }}
       />
