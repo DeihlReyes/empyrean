@@ -45,8 +45,9 @@ export default function BrokerAgentDeveloperPage() {
               width={480}
               height={480}
               priority
-              maxScaleIncrease={0.06}
-              scrollRangePx={420}
+              startScale={1.1}
+              endScale={1.0}
+              scrollRangePx={520}
               className="
                 w-72 md:w-96 lg:w-[420px] h-auto
                 drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
