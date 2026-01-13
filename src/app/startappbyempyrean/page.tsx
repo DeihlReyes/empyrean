@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ContentCard } from "@/components/content-card";
 import CustomSolutions from "@/components/custom-solutions";
 import Script from "next/script";
@@ -29,20 +29,26 @@ export default function BrokerAgentDeveloperPage() {
 
   const [activeImage, setActiveImage] = useState<number | null>(null);
 
-  const goPrev = () => {
-    if (activeImage === null) return;
-    const idx = screenshots.indexOf(activeImage);
-    setActiveImage(
-      screenshots[(idx - 1 + screenshots.length) % screenshots.length]
-    );
-  };
+  const goPrev = useCallback(() => {
+    setActiveImage((current) => {
+      if (current === null) return null;
+      const idx = screenshots.indexOf(current);
+      const prev =
+        screenshots[(idx - 1 + screenshots.length) % screenshots.length];
+      return prev;
+    });
+  }, [screenshots]);
 
-  const goNext = () => {
-    if (activeImage === null) return;
-    const idx = screenshots.indexOf(activeImage);
-    setActiveImage(screenshots[(idx + 1) % screenshots.length]);
-  };
+  const goNext = useCallback(() => {
+    setActiveImage((current) => {
+      if (current === null) return null;
+      const idx = screenshots.indexOf(current);
+      const next = screenshots[(idx + 1) % screenshots.length];
+      return next;
+    });
+  }, [screenshots]);
 
+  // Keyboard navigation: ESC closes, arrows navigate
   useEffect(() => {
     if (activeImage === null) return;
 
@@ -54,8 +60,9 @@ export default function BrokerAgentDeveloperPage() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeImage]);
+  }, [activeImage, goNext, goPrev]);
 
+  // Simple touch swipe on the modal
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
 
@@ -67,11 +74,19 @@ export default function BrokerAgentDeveloperPage() {
   const onTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX === null || touchStartY === null) return;
 
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
 
+    const dx = endX - touchStartX;
+    const dy = endY - touchStartY;
+
+    // horizontal swipe only
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-      dx > 0 ? goPrev() : goNext();
+      if (dx > 0) {
+        goPrev();
+      } else {
+        goNext();
+      }
     }
 
     setTouchStartX(null);
@@ -85,7 +100,7 @@ export default function BrokerAgentDeveloperPage() {
           Start App by Empyrean
         </h1>
 
-        {/* Branding */}
+        {/* Branding Section */}
         <section className="mb-4">
           <div className="flex justify-center mt-2">
             <ScrollScaleIcon
@@ -97,7 +112,11 @@ export default function BrokerAgentDeveloperPage() {
               startScale={1.1}
               endScale={1.0}
               scrollRangePx={520}
-              className="w-72 md:w-96 lg:w-[420px] h-auto drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)] float-icon"
+              className="
+                w-72 md:w-96 lg:w-[420px] h-auto
+                drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
+                float-icon
+              "
             />
           </div>
         </section>
@@ -113,31 +132,54 @@ export default function BrokerAgentDeveloperPage() {
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
           Centralising Real Estate starts here. #BetterRealEstate for everyone.
           <br />
-          An additional operating system for Practitioners.
+          An additional operating system for Practicioners. In One Central Real
+          Estate Platform.
         </p>
 
-        {/* Content Cards */}
         <div className="mb-12">
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
               All listing off and on the market, per city, per street, per
-              building, all units. Easier search, easier filter with our{" "}
-              <strong>Philippine Real Estate Inventory</strong>.
+              building, all units. Easier search, easier filter. With our{" "}
+              <strong>Philippine Real Estate Inventory</strong>. You&apos;d only
+              need to submit or claim a property listing to receive inquiries
+              from other practitioners and clients!
+              <br />
+              <br />
+              You may also access the Inventory below.
+              <div className="flex justify-end mt-4">
+                <a
+                  href="https://empyrean.ph/philippinerealestateinventory"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm hover:bg-gray-300 transition"
+                >
+                  Philippine Real Estate Inventory
+                </a>
+              </div>
             </>
           </ContentCard>
         </div>
 
-        {/* Features */}
-        <section className="mb-12">
+        {/* Features Board */}
+        <section className="mb-12" aria-label="Start App Features">
           <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+            <div className="flex items-center justify-between gap-4 mb-5">
+              <div className="text-sm font-semibold text-gray-900">
+                Feature Board
+              </div>
+              <div className="text-xs text-gray-500">
+                {FEATURES.length} features
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {FEATURES.map((label) => (
                 <div
                   key={label}
-                  className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3"
+                  className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 hover:bg-white hover:shadow-sm transition"
                 >
-                  <span className="h-2.5 w-2.5 rounded-full bg-gray-400" />
-                  <div className="text-sm font-medium text-gray-800">
+                  <span className="h-2.5 w-2.5 rounded-full bg-gray-400 group-hover:bg-gray-700 transition" />
+                  <div className="text-sm md:text-[15px] font-medium text-gray-800 leading-snug">
                     {label}
                   </div>
                 </div>
@@ -146,83 +188,207 @@ export default function BrokerAgentDeveloperPage() {
           </div>
         </section>
 
-        {/* Screenshots */}
+        <div className="mb-12">
+          <ContentCard title="Anything wrong? #AccessEmpyrean">
+            <>
+              Yes. You can finally report to someone.
+              <br />
+              <br />
+              As a broker, as an agent, as a client. We aim to standardise the
+              industry, we aim to promote good practices. You may always contact
+              us!
+            </>
+          </ContentCard>
+        </div>
+
+        {/* FAQs */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Frequently Asked Questions
+          </h2>
+
+          <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify">
+            <p>
+              <strong>
+                How is Start App different from other listing websites?
+              </strong>
+              <br />
+              <br />
+              We are not just another listing website, we aim to become the
+              Philippine&apos;s first public multi-listing service complemented
+              with a central platform for both practitioners and clients. Simply
+              put, we can also empower other listing websites with our
+              integrated data.
+              <br />
+              <br />
+              <strong>
+                I am a Real Estate Practitioner. How can this app help me?
+              </strong>
+              <br />
+              <br />
+              You get to have access to all property listings in our database
+              integrated from multiple sources!
+              <br />
+              <br />
+              <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
+              <br />
+              <br />
+              We require our Brokers to verify their account. Simply create an
+              account and submit the requirements. Same for agents, only that
+              they must be claimed by respective brokers through an Empyrean
+              Code we will provide them.
+              <br />
+              <br />
+              <strong>I am a freelance agent. How can I sign up?</strong>
+              <br />
+              <br />
+              We require all practicing agents to urge their brokers to sign up
+              and access our platform for coordination.
+              <br />
+              <br />
+              <strong>I am a Client. How can I sign up?</strong>
+              <br />
+              <br />
+              Simply create an account in our app to begin coordination. Most of
+              our listings will be claimed by a professional. If your
+              transaction is direct to owner, we will provide you one.
+              <br />
+              <br />
+            </p>
+          </div>
+        </section>
+
         <h2 className="text-2xl font-bold text-center mb-6">
           Application Rough Snapshots
         </h2>
 
+        {/* Clickable Collage */}
         <section className="mb-16">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {screenshots.map((index) => (
-              <button
-                key={index}
-                onClick={() => setActiveImage(index)}
-                className="relative rounded-2xl overflow-hidden border bg-white shadow hover:shadow-lg transition"
-              >
-                <div className="relative w-full aspect-[9/16]">
-                  <Image
-                    src={`/assets/SS${index}.png`}
-                    alt={`Screenshot ${index}`}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </button>
-            ))}
+          <div className="relative mx-auto max-w-5xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {screenshots.map((index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setActiveImage(index)}
+                  className="
+                    relative rounded-2xl overflow-hidden
+                    border border-gray-200 bg-white
+                    shadow-md hover:shadow-xl
+                    transition-transform duration-300
+                    hover:-translate-y-1
+                    focus:outline-none
+                  "
+                >
+                  <div className="relative w-full aspect-[9/16] bg-white">
+                    <Image
+                      src={`/assets/SS${index}.png`}
+                      alt={`Start App Screenshot ${index}`}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (!target.src.endsWith(`SS${index}.jpg`)) {
+                          target.src = `/assets/SS${index}.jpg`;
+                        }
+                      }}
+                    />
+                  </div>
+
+                  <div className="px-3 py-2 border-t border-gray-100">
+                    <div className="text-xs text-gray-500">SS{index}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Tip: Swipe left/right in the fullscreen viewer to browse
+              screenshots.
+            </p>
           </div>
         </section>
 
-        <CustomSolutions />
+        <div className="mt-12">
+          <CustomSolutions />
+        </div>
       </div>
 
-      {/* MODAL VIEWER — FIXED SCALING */}
+      {/* Fullscreen Modal Viewer */}
       {activeImage !== null && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4"
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 sm:p-6"
           onClick={() => setActiveImage(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Screenshot viewer"
         >
           <div
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-[460px]"
+            className="relative w-full max-w-md sm:max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
-            {/* Header */}
-            <div className="flex justify-between items-center px-4 py-3 border-b">
-              <span className="text-xs text-gray-500">
+            {/* Header / Controls */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+              <div className="text-xs text-gray-500">
                 SS{activeImage} / {screenshots.length}
-              </span>
-              <div className="flex gap-2">
-                <button onClick={goPrev} className="px-2 py-1 bg-gray-100 rounded">
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-800 text-sm hover:bg-gray-200 transition"
+                  aria-label="Previous screenshot"
+                >
                   ←
                 </button>
-                <button onClick={goNext} className="px-2 py-1 bg-gray-100 rounded">
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-800 text-sm hover:bg-gray-200 transition"
+                  aria-label="Next screenshot"
+                >
                   →
                 </button>
                 <button
+                  type="button"
                   onClick={() => setActiveImage(null)}
-                  className="px-2 py-1 bg-gray-900 text-white rounded"
+                  className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-sm hover:bg-black transition"
+                  aria-label="Close viewer"
                 >
                   ✕
                 </button>
               </div>
             </div>
 
-            {/* IMAGE — NO CROP, SCALED */}
-            <div className="flex justify-center items-center py-4">
+            {/* ✅ FIXED: Image scales down, no forced 9:16 frame, no crop */}
+            <div className="flex items-center justify-center bg-white py-4">
               <div className="relative w-[92vw] max-w-[420px] h-[72vh] sm:h-[78vh]">
                 <Image
                   src={`/assets/SS${activeImage}.png`}
-                  alt={`Screenshot ${activeImage}`}
+                  alt={`Start App Screenshot ${activeImage}`}
                   fill
                   className="object-contain"
                   priority
+                  sizes="(max-width: 640px) 92vw, 420px"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.endsWith(`SS${activeImage}.jpg`)) {
+                      target.src = `/assets/SS${activeImage}.jpg`;
+                    }
+                  }}
                 />
               </div>
             </div>
 
-            <div className="text-xs text-center text-gray-500 py-3 border-t">
-              Swipe / Arrow Keys • ESC to close
+            {/* Footer hint */}
+            <div className="px-4 py-3 border-t border-gray-100 text-center">
+              <div className="text-xs text-gray-500">
+                Swipe left/right or use arrow keys to navigate • ESC to close
+              </div>
             </div>
           </div>
         </div>
@@ -235,8 +401,23 @@ export default function BrokerAgentDeveloperPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            name: "Start App by Empyrean",
-            areaServed: "Philippines",
+            name: "Property Management Services",
+            provider: { "@type": "Organization", name: "Empyrean" },
+            description:
+              "Comprehensive property management services including maintenance, leasing, and sales.",
+            offers: {
+              "@type": "Offer",
+              category: "Property Management",
+              description:
+                "End-to-end real estate solutions including keyholding, leasing, and maintenance.",
+            },
+            serviceType: [
+              "Property Management",
+              "Maintenance Services",
+              "Property Leasing",
+              "Property Sales",
+            ],
+            areaServed: { "@type": "Country", name: "Philippines" },
           }),
         }}
       />
