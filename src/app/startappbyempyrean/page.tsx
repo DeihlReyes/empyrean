@@ -85,6 +85,7 @@ export default function BrokerAgentDeveloperPage() {
           Start App by Empyrean
         </h1>
 
+        {/* Branding */}
         <section className="mb-4">
           <div className="flex justify-center mt-2">
             <ScrollScaleIcon
@@ -115,18 +116,48 @@ export default function BrokerAgentDeveloperPage() {
           An additional operating system for Practitioners.
         </p>
 
+        {/* Content Cards */}
+        <div className="mb-12">
+          <ContentCard title="Access to All Property Listings in the Philippines">
+            <>
+              All listing off and on the market, per city, per street, per
+              building, all units. Easier search, easier filter with our{" "}
+              <strong>Philippine Real Estate Inventory</strong>.
+            </>
+          </ContentCard>
+        </div>
+
+        {/* Features */}
+        <section className="mb-12">
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {FEATURES.map((label) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3"
+                >
+                  <span className="h-2.5 w-2.5 rounded-full bg-gray-400" />
+                  <div className="text-sm font-medium text-gray-800">
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Screenshots */}
         <h2 className="text-2xl font-bold text-center mb-6">
           Application Rough Snapshots
         </h2>
 
-        {/* Thumbnail Grid */}
         <section className="mb-16">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {screenshots.map((index) => (
               <button
                 key={index}
                 onClick={() => setActiveImage(index)}
-                className="relative rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-md hover:shadow-xl transition hover:-translate-y-1"
+                className="relative rounded-2xl overflow-hidden border bg-white shadow hover:shadow-lg transition"
               >
                 <div className="relative w-full aspect-[9/16]">
                   <Image
@@ -144,7 +175,7 @@ export default function BrokerAgentDeveloperPage() {
         <CustomSolutions />
       </div>
 
-      {/* FULLSCREEN MODAL (FIXED SCALING) */}
+      {/* MODAL VIEWER — FIXED SCALING */}
       {activeImage !== null && (
         <div
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4"
@@ -177,8 +208,8 @@ export default function BrokerAgentDeveloperPage() {
               </div>
             </div>
 
-            {/* IMAGE — NOT FULLSCREEN, NO CROP */}
-            <div className="flex justify-center items-center bg-white py-4">
+            {/* IMAGE — NO CROP, SCALED */}
+            <div className="flex justify-center items-center py-4">
               <div className="relative w-[92vw] max-w-[420px] h-[72vh] sm:h-[78vh]">
                 <Image
                   src={`/assets/SS${activeImage}.png`}
