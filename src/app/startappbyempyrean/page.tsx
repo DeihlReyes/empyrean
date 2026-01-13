@@ -50,59 +50,27 @@ export default function BrokerAgentDeveloperPage() {
         <p className="text-sm md:text-base text-center mb-14 max-w-4xl mx-auto">
           You Access Us, You Access Everyone.
         </p>
-
-  <h2 className="text-xl md:text-xl font-bold text-center mb-4">
-            Application Features
-          </h2>
         
         <div className="mb-12" aria-label="The Business Partnership Offer">
-          <ContentCard title="The Business Partnership Offer">
+          <ContentCard title="Access to All Property Listings in the Philippines">
             <>
-              Empyrean Hospitality will be managing your property as your
-              Official Property Manager. We will maintain and take care of your
-              property while maximizing its profitability.
-              <br />
-              <br />
-              Your property will be fixed, courtesy of both the owner and
-              Empyrean, according to Empyrean branding and standards. Empyrean
-              shall also be responsible for securing decorations and essentials
-              for the property should it deem necessary.
-              <br />
-              <br />
-              At Empyrean, we believe that trust is the foundation of every
-              partnership. When a property is placed under our care, it becomes
-              our full professional responsibility. We respectfully ask that
-              day-to-day operational control be entrusted to our team, allowing
-              us to manage your property proactively while keeping you fully
-              informed through transparent reporting.
+            All listing off and on the market, per city, per street, per building, all units. With our <strong>Philippine Real Estate Inventory</strong>. You'd only need to submit or claim a property listing to receive inquiries from other practitioners and clients!
             </>
           </ContentCard>
         </div>
 
-        <div className="mb-12" aria-label="Documents Needed">
-          <ContentCard title="Documents Needed">
+        <div className="mb-12" aria-label="Central Platform for All">
+          <ContentCard title="Central Platform">
             <>
-              Empyrean Real Estate Corporation and the owner shall execute two (2)
-              documents: <strong>The SPA Document</strong> and the{" "}
-              <strong>Memorandum of Agreement for Property Management</strong>.
-              <br />
-              <br />
-              The SPA Document serves as official authorization for Empyrean to
-              act as Property Manager and perform property management and
-              leasing-related actions. The Memorandum of Agreement details the
-              business partnership and its specifics.
+              Aside from our database, we would also have in-app city-based forums, and a very own marketplace. From agent to agent, client to agent. This is the central platform for Philippine Real Estate.
             </>
           </ContentCard>
         </div>
 
-        <div className="mb-12" aria-label="The Partnership Setups">
-          <ContentCard title="The Partnership Setups">
+        <div className="mb-12" aria-label="Verified Transactions">
+          <ContentCard title="Verified Transactions">
             <>
-              Each property is evaluated individually. Partnership setups are
-              offered based on location, demographics, and revenue potential.
-              We currently offer three setups: subleasing or 65/35 (utilities
-              included). Association dues and real estate taxes are excluded.
-              Final setup is subject to mutual agreement.
+              Accountability is in our core values. All agents in the App will be claimed by their respective verified brokers. All client to owner inquiries are provided a professional; and if there is any problems, you can finally report to someone! Just #AccessEmpyrean.
             </>
           </ContentCard>
         </div>
