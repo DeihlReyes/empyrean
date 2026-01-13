@@ -15,46 +15,16 @@ export const metadata: Metadata = {
 };
 
 const FEATURES = [
-  {
-    title: "SuperApp for Philippine Real Estate",
-    desc: "One central platform for practitioners and clients — listings, coordination, and support in one place.",
-  },
-  {
-    title: "Central Listing Database",
-    desc: "Access a growing inventory across cities, buildings, and units — off and on the market.",
-  },
-  {
-    title: "User-friendly Search and Filter",
-    desc: "Find the right listing faster with clean filters by location, building, unit details, and more.",
-  },
-  {
-    title: "Verified Transactions",
-    desc: "Brokers are verified. Agents are claimed. Built-in accountability to help protect clients and practitioners.",
-  },
-  {
-    title: "In-App City Groups and Marketplace",
-    desc: "City-based forums and a verified marketplace — safer coordination than random social media groups.",
-  },
-  {
-    title: "In-App Messaging",
-    desc: "Message directly inside the app to coordinate availability, viewings, and next steps.",
-  },
-  {
-    title: "24/7 Customer Service and Admin Support",
-    desc: "Get help anytime — escalations, reporting, and admin support when you need it.",
-  },
-  {
-    title: "Easy Claim or Submit Listing",
-    desc: "Claim a listing if you represent it, or submit one to receive inquiries from the market.",
-  },
-  {
-    title: "Faster Reporting and Accountability",
-    desc: "Report issues quickly with a clear escalation path — we enforce better practices.",
-  },
-  {
-    title: "Access to Verified Added Services",
-    desc: "Tap into vetted services to support transactions and property-related needs.",
-  },
+  "SuperApp for Philippine Real Estate",
+  "Central Listing Database",
+  "User-friendly Search and Filter",
+  "Verified Transactions",
+  "In-App City Groups and Marketplace",
+  "In-App Messaging",
+  "24/7 Customer Service and Admin Support",
+  "Easy Claim or Submit Listing",
+  "Faster Reporting and Accountability",
+  "Access to Verified Added Services",
 ];
 
 export default function BrokerAgentDeveloperPage() {
@@ -114,29 +84,49 @@ export default function BrokerAgentDeveloperPage() {
           </ContentCard>
         </div>
 
-        {/* ✅ Features Section (cleaner, less “ugly”, consistent) */}
+        {/* ✅ Redesigned Features Section (titles only, looks clean) */}
         <section className="mb-12" aria-label="Start App Features">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold">App Features</h2>
-            <p className="text-sm md:text-base text-gray-600 mt-2 max-w-3xl mx-auto">
-              Built to make real estate coordination faster, safer, and more
-              accountable — for everyone.
-            </p>
+          {/* Top row: heading card + quick summary card (no extra copy needed) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div className="lg:col-span-2">
+              <ContentCard title="Start App Features">
+                <div className="text-sm md:text-base text-gray-700">
+                  A quick overview of what the app includes.
+                </div>
+              </ContentCard>
+            </div>
+            <ContentCard title="Built for Coordination">
+              <div className="text-sm md:text-base text-gray-700">
+                One platform, one workflow, one standard.
+              </div>
+            </ContentCard>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {FEATURES.map((f) => (
-              <div
-                key={f.title}
-                className="h-full [&>div]:h-full [&>div]:p-5 md:[&>div]:p-6"
-              >
-                <ContentCard title={f.title}>
-                  <p className="text-sm md:text-[15px] text-gray-700 leading-relaxed">
-                    {f.desc}
-                  </p>
-                </ContentCard>
+          {/* Main feature board: “chips” inside a styled board */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+            <div className="flex items-center justify-between gap-4 mb-5">
+              <div className="text-sm font-semibold text-gray-900">
+                Feature Board
               </div>
-            ))}
+              <div className="text-xs text-gray-500">
+                {FEATURES.length} features
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {FEATURES.map((label) => (
+                <div
+                  key={label}
+                  className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 hover:bg-white hover:shadow-sm transition"
+                >
+                  {/* Minimal icon-dot */}
+                  <span className="h-2.5 w-2.5 rounded-full bg-gray-400 group-hover:bg-gray-700 transition" />
+                  <div className="text-sm md:text-[15px] font-medium text-gray-800 leading-snug">
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -166,10 +156,7 @@ export default function BrokerAgentDeveloperPage() {
             "@context": "https://schema.org",
             "@type": "Service",
             name: "Property Management Services",
-            provider: {
-              "@type": "Organization",
-              name: "Empyrean",
-            },
+            provider: { "@type": "Organization", name: "Empyrean" },
             areaServed: { "@type": "Country", name: "Philippines" },
           }),
         }}
