@@ -99,7 +99,7 @@ export default function BrokerAgentDeveloperPage() {
             </>
           </ContentCard>
 
-          <ContentCard title="In-App City-based Groups and Marketplace">
+          <ContentCard title="In-App City Groups and Marketplace">
             <>
               Exploring in Social Media Groups and Marketplace is filled with
               unlicensed practitioners, or unethical individuals without any
