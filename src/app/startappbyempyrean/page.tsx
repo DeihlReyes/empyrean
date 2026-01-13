@@ -45,9 +45,9 @@ export default function BrokerAgentDeveloperPage() {
               width={480}
               height={480}
               priority
-              startScale={1.1}
-              endScale={1.0}
-              scrollRangePx={520}
+              startScale={1.1}     // bigger while viewing at top
+              endScale={1.0}       // shrink as you scroll down
+              scrollRangePx={520}  // smoothness range
               className="
                 w-72 md:w-96 lg:w-[420px] h-auto
                 drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
@@ -145,53 +145,26 @@ export default function BrokerAgentDeveloperPage() {
 
           <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify">
             <p>
-              <strong>
-                How is Start App different from other listing websites?
-              </strong>
-              <br />
-              <br />
-              We are not just another listing website, we aim to become the
-              Philippine&apos;s first public multi-listing service complemented
-              with a central platform for both practitioners and clients. Simply
-              put, we can also empower other listing websites with our
-              integrated data.
-              <br />
-              <br />
-              <strong>
-                I am a Real Estate Practitioner. How can this app help me?
-              </strong>
-              <br />
-              <br />
-              You get to have access to all property listings in our database
-              integrated from multiple sources!
-              <br />
-              <br />
-              <strong>
-                I am a Real Estate Practitioner. How can I sign up?
-              </strong>
-              <br />
-              <br />
-              We require our Brokers to verify their account. Simply create an
-              account and submit the requirements. Same for agents, only that
-              they must be claimed by respective brokers through an Empyrean
-              Code we will provide them.
-              <br />
-              <br />
+              <strong>How is Start App different from other listing websites?</strong>
+              <br /><br />
+              We are not just another listing website, we aim to become the Philippine&apos;s first public multi-listing service complemented with a central platform for both practitioners and clients. Simply put, we can also empower other listing websites with our integrated data.
+              <br /><br />
+              <strong>I am a Real Estate Practitioner. How can this app help me?</strong>
+              <br /><br />
+              You get to have access to all property listings in our database integrated from multiple sources!
+              <br /><br />
+              <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
+              <br /><br />
+              We require our Brokers to verify their account. Simply create an account and submit the requirements. Same for agents, only that they must be claimed by respective brokers through an Empyrean Code we will provide them.
+              <br /><br />
               <strong>I am a freelance agent. How can I sign up?</strong>
-              <br />
-              <br />
-              We require all practicing agents to urge their brokers to sign up
-              and access our platform for coordination.
-              <br />
-              <br />
+              <br /><br />
+              We require all practicing agents to urge their brokers to sign up and access our platform for coordination.
+              <br /><br />
               <strong>I am a Client. How can I sign up?</strong>
-              <br />
-              <br />
-              Simply create an account in our app to begin coordination. Most of
-              our listings will be claimed by a professional. If your
-              transaction is direct to owner, we will provide you one.
-              <br />
-              <br />
+              <br /><br />
+              Simply create an account in our app to begin coordination. Most of our listings will be claimed by a professional. If your transaction is direct to owner, we will provide you one.
+              <br /><br />
             </p>
           </div>
         </section>
@@ -218,10 +191,7 @@ export default function BrokerAgentDeveloperPage() {
             "@context": "https://schema.org",
             "@type": "Service",
             name: "Property Management Services",
-            provider: {
-              "@type": "Organization",
-              name: "Empyrean",
-            },
+            provider: { "@type": "Organization", name: "Empyrean" },
             description:
               "Comprehensive property management services including maintenance, leasing, and sales.",
             offers: {
@@ -236,10 +206,7 @@ export default function BrokerAgentDeveloperPage() {
               "Property Leasing",
               "Property Sales",
             ],
-            areaServed: {
-              "@type": "Country",
-              name: "Philippines",
-            },
+            areaServed: { "@type": "Country", name: "Philippines" },
           }),
         }}
       />
