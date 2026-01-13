@@ -54,7 +54,7 @@ export default function BrokerAgentDeveloperPage() {
         </section>
 
         <p className="text-sm md:text-base text-center mb-14 max-w-4xl mx-auto">
-          Empyrean&apos;s branding rests on two of its core values: simplicity and quality. For all our designs, we strive to deliver simple yet elegant display and delivery of services. In this case, comfort, serenity, and beauty.
+          You Access Us, You Access Everyone.
         </p>
 
         <div className="mb-12" aria-label="The Business Partnership Offer">
