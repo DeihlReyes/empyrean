@@ -59,8 +59,7 @@ export default function BrokerAgentDeveloperPage() {
               <br />
               <br />
               You may also access the Inventory below.
-              
-<div className="flex justify-end mt-4">
+              <div className="flex justify-end mt-4">
                 <a
                   href="https://empyrean.ph/philippinerealestateinventory"
                   rel="noopener noreferrer"
@@ -73,40 +72,49 @@ export default function BrokerAgentDeveloperPage() {
           </ContentCard>
         </div>
 
-        <div className="mb-12" aria-label="Central Platform for All">
+        {/* ✅ 3 cards in one row (md+) */}
+        <section
+          className="mb-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+          aria-label="Central Platform Features"
+        >
           <ContentCard title="Central Platform">
             <>
-              Practicioners go here, clients go here. From the Philippine Real Estate Inventory, you may request availability status and coordiante viewings through our application.
+              Practicioners go here, clients go here. From the Philippine Real
+              Estate Inventory, you may request availability status and
+              coordiante viewings through our application.
             </>
           </ContentCard>
-        </div>
 
-        <div className="mb-12" aria-label="Verified Transactions">
           <ContentCard title="Verified Transactions">
             <>
-              Brokers are verified, agents are claimed. Accountability is in our core values, if you do not have a professional, you will be provided one.
+              Brokers are verified, agents are claimed. Accountability is in our
+              core values, if you do not have a professional, you will be
+              provided one.
             </>
           </ContentCard>
-        </div>
 
-        <div className="mb-12" aria-label="In-App City-based Groups and Verified Marketplace">
           <ContentCard title="In-App City-based Groups and Verified Marketplace">
             <>
-              Exploring in Social Media Groups and Marketplace is filled with unlicensed practitioners, or unethical individuals without any accountabiltiy! It is dangerous, for anyone. As central platform, we offer in-app city-based
-              group forums, and a very own marketplace. From agent to agent, client to
-              agent. This is the central platform for Philippine Real Estate.
+              Exploring in Social Media Groups and Marketplace is filled with
+              unlicensed practitioners, or unethical individuals without any
+              accountabiltiy! It is dangerous, for anyone. As central platform,
+              we offer in-app city-based group forums, and a very own
+              marketplace. From agent to agent, client to agent. This is the
+              central platform for Philippine Real Estate.
+            </>
+          </ContentCard>
+        </section>
+
+        <div className="mb-12" aria-label="Anything wrong? #AccessEmpyrean">
+          <ContentCard title="Anything wrong? #AccessEmpyrean">
+            <>
+              Yes. You can finally report to someone. As a broker, as an agent,
+              as a client. We aim to standardise the industry, we aim to promote
+              good practices. You may always contact us!
             </>
           </ContentCard>
         </div>
 
-        <div className="mb-12" aria-label="In-App City-based Groups and Verified Marketplace">
-          <ContentCard title="Anything wrong? #AccessEmpyrean">
-            <>
-              Yes. You can finally report to someone. As a broker, as an agent, as a client. We aim to standardise the industry, we aim to promote good practices. You may always contact us!
-            </>
-          </ContentCard>
-        </div>
-        
         {/* FAQs */}
         <section className="mb-10">
           <h2 className="text-2xl font-bold text-center mb-6">
@@ -115,9 +123,7 @@ export default function BrokerAgentDeveloperPage() {
 
           <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify">
             <p>
-              <strong>
-                What is Empyrean Property Management and Hospitality?
-              </strong>
+              <strong>What is Empyrean Property Management and Hospitality?</strong>
               <br />
               <br />
               Empyrean’s real estate arm responsible for property management and
