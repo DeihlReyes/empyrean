@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
+/* ===============================
+   Theme Variables
+   =============================== */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --font-cinzel: "Cinzel", serif;
   --font-lora: "Lora", serif;
 }
+
+/* ===============================
+   Tailwind Theme Bridge
+   =============================== */
 
 @theme inline {
   --color-background: var(--background);
@@ -15,6 +23,10 @@
   --font-lora: var(--font-lora);
   --font-cinzel: var(--font-cinzel);
 }
+
+/* ===============================
+   Base Styles
+   =============================== */
 
 body {
   background: var(--background);
@@ -29,4 +41,38 @@ h4,
 h5,
 h6 {
   font-family: var(--font-cinzel);
+}
+
+/* ===============================
+   Start App Icon Animations
+   =============================== */
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes softPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.28));
+  }
+  50% {
+    filter: drop-shadow(0 28px 60px rgba(0, 0, 0, 0.38));
+  }
+}
+
+/* ===============================
+   Accessibility: Reduced Motion
+   =============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[float_6s_ease-in-out_infinite\,softPulse_6s_ease-in-out_infinite\] {
+    animation: none;
+  }
 }
