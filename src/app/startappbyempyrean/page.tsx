@@ -3,6 +3,7 @@ import CustomSolutions from "@/components/custom-solutions";
 import { Metadata } from "next";
 import Script from "next/script";
 import ScrollScaleIcon from "@/components/ScrollScaleIcon";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Start App by Empyrean | Empyrean Real Estate Solutions",
@@ -45,9 +46,9 @@ export default function BrokerAgentDeveloperPage() {
               width={480}
               height={480}
               priority
-              startScale={1.1}     // bigger while viewing at top
-              endScale={1.0}       // shrink as you scroll down
-              scrollRangePx={520}  // smoothness range
+              startScale={1.1} // bigger while viewing at top
+              endScale={1.0} // shrink as you scroll down
+              scrollRangePx={520} // smoothness range
               className="
                 w-72 md:w-96 lg:w-[420px] h-auto
                 drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
@@ -145,63 +146,113 @@ export default function BrokerAgentDeveloperPage() {
 
           <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify">
             <p>
-              <strong>How is Start App different from other listing websites?</strong>
-              <br /><br />
-              We are not just another listing website, we aim to become the Philippine&apos;s first public multi-listing service complemented with a central platform for both practitioners and clients. Simply put, we can also empower other listing websites with our integrated data.
-              <br /><br />
-              <strong>I am a Real Estate Practitioner. How can this app help me?</strong>
-              <br /><br />
-              You get to have access to all property listings in our database integrated from multiple sources!
-              <br /><br />
+              <strong>
+                How is Start App different from other listing websites?
+              </strong>
+              <br />
+              <br />
+              We are not just another listing website, we aim to become the
+              Philippine&apos;s first public multi-listing service complemented
+              with a central platform for both practitioners and clients. Simply
+              put, we can also empower other listing websites with our
+              integrated data.
+              <br />
+              <br />
+              <strong>
+                I am a Real Estate Practitioner. How can this app help me?
+              </strong>
+              <br />
+              <br />
+              You get to have access to all property listings in our database
+              integrated from multiple sources!
+              <br />
+              <br />
               <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
-              <br /><br />
-              We require our Brokers to verify their account. Simply create an account and submit the requirements. Same for agents, only that they must be claimed by respective brokers through an Empyrean Code we will provide them.
-              <br /><br />
+              <br />
+              <br />
+              We require our Brokers to verify their account. Simply create an
+              account and submit the requirements. Same for agents, only that
+              they must be claimed by respective brokers through an Empyrean
+              Code we will provide them.
+              <br />
+              <br />
               <strong>I am a freelance agent. How can I sign up?</strong>
-              <br /><br />
-              We require all practicing agents to urge their brokers to sign up and access our platform for coordination.
-              <br /><br />
+              <br />
+              <br />
+              We require all practicing agents to urge their brokers to sign up
+              and access our platform for coordination.
+              <br />
+              <br />
               <strong>I am a Client. How can I sign up?</strong>
-              <br /><br />
-              Simply create an account in our app to begin coordination. Most of our listings will be claimed by a professional. If your transaction is direct to owner, we will provide you one.
-              <br /><br />
+              <br />
+              <br />
+              Simply create an account in our app to begin coordination. Most of
+              our listings will be claimed by a professional. If your
+              transaction is direct to owner, we will provide you one.
+              <br />
+              <br />
             </p>
           </div>
         </section>
 
         <h2 className="text-2xl font-bold text-center mb-6">
-            Application Rough Snapshots
-          </h2>
+          Application Rough Snapshots
+        </h2>
 
         {/* Application Rough Snapshots – Stacked Collage */}
-<section className="mb-16">
-  <div className="relative mx-auto max-w-5xl">
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-      {Array.from({ length: 10 }, (_, i) => {
-        const index = i + 1;
-        return (
-          <div
-            key={index}
-            className="
-              relative rounded-2xl overflow-hidden
-              border border-gray-200 bg-white
-              shadow-md hover:shadow-xl
-              transition-transform duration-300
-              hover:-translate-y-1
-            "
-          >
-            <img
-              src={`/assets/SS${index}.png`}
-              alt={`Start App Screenshot ${index}`}
-              className="w-full h-auto object-contain"
-              loading="lazy"
-            />
+        <section className="mb-16">
+          <div className="relative mx-auto max-w-5xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {Array.from({ length: 10 }, (_, i) => {
+                const index = i + 1;
+
+                return (
+                  <div
+                    key={index}
+                    className="
+                      relative rounded-2xl overflow-hidden
+                      border border-gray-200 bg-white
+                      shadow-md hover:shadow-xl
+                      transition-transform duration-300
+                      hover:-translate-y-1
+                    "
+                  >
+                    {/* Fixed ratio so the grid is stable; image never crops */}
+                    <div className="relative w-full aspect-[9/16] bg-white">
+                      <Image
+                        src={`/assets/SS${index}.png`}
+                        alt={`Start App Screenshot ${index}`}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        // If SS6 is missing/misnamed, this helps by falling back to .jpg
+                        onError={(e) => {
+                          // Next/Image uses an underlying <img> in the DOM at runtime
+                          // so we can swap the src on error for a fallback.
+                          const target = e.target as HTMLImageElement;
+                          if (!target.src.endsWith(`SS${index}.jpg`)) {
+                            target.src = `/assets/SS${index}.jpg`;
+                          }
+                        }}
+                      />
+                    </div>
+
+                    {/* Label so you can immediately see which file is missing */}
+                    <div className="px-3 py-2 border-t border-gray-100">
+                      <div className="text-xs text-gray-500">SS{index}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Note: Files must be inside <strong>/public/assets/</strong> and
+              match the exact name (case-sensitive):{" "}
+              <strong>SS1.png … SS10.png</strong>.
+            </p>
           </div>
-        );
-      })}
-    </div>
-  </div>
-</section>
+        </section>
 
         <div className="mt-12">
           <CustomSolutions />
