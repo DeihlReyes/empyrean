@@ -19,26 +19,33 @@ export default function BrokerAgentDeveloperPage() {
     <main className="min-h-screen flex flex-col">
       <div className="container mx-auto px-4 py-16 max-w-5xl">
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">
-          Start App by Empyrean
+          Start App by Empyrean!
         </h1>
 
-        <p className="text-sm md:text-base text-center mb-14 max-w-4xl mx-auto">
+        {/* reduced spacing below */}
+        <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
           Centralising Real Estate starts here. #BetterRealEstate for everyone!
           Practitioners, Clients, and Business Owners.
         </p>
 
         {/* Branding Section */}
         <section className="mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
+            The Empyrean Hospitality Branding
+          </h2>
 
-          {/* single centered image */}
-          <div className="flex justify-center mt-6">
+          {/* larger icon + drop shadow */}
+          <div className="flex justify-center mt-2">
             <Image
               src="/assets/startappicon.png"
               alt="Start App by Empyrean"
-              width={256}
-              height={256}
-              className="w-48 md:w-64 h-auto"
+              width={320}
+              height={320}
               priority
+              className="
+                w-56 md:w-72 h-auto
+                drop-shadow-[0_14px_30px_rgba(0,0,0,0.28)]
+              "
             />
           </div>
         </section>
@@ -50,9 +57,9 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="The Business Partnership Offer">
           <ContentCard title="The Business Partnership Offer">
             <>
-              Empyrean Hospitality will be managing your property as your Official
-              Property Manager. We will maintain and take care of your property
-              while maximizing its profitability.
+              Empyrean Hospitality will be managing your property as your
+              Official Property Manager. We will maintain and take care of your
+              property while maximizing its profitability.
               <br />
               <br />
               Your property will be fixed, courtesy of both the owner and
@@ -110,7 +117,7 @@ export default function BrokerAgentDeveloperPage() {
           </ContentCard>
         </div>
 
-        {/* FAQs Section */}
+        {/* FAQs */}
         <section className="mb-10">
           <h2 className="text-2xl font-bold text-center mb-6">
             Frequently Asked Questions
@@ -123,8 +130,8 @@ export default function BrokerAgentDeveloperPage() {
               </strong>
               <br />
               <br />
-              This is Empyrean’s real estate arm responsible for property
-              management and guest accommodation services.
+              Empyrean’s real estate arm responsible for property management and
+              guest accommodation services.
               <br />
               <br />
               <strong>What does Empyrean Property Management do?</strong>
@@ -133,16 +140,15 @@ export default function BrokerAgentDeveloperPage() {
               A free-of-charge designation that authorizes Empyrean as Official
               Property Manager and keyholder, allowing us to manage, lease, and
               market properties. Maintenance, repair, and cleaning services are
-              provided on a quote basis. This requires a Special Power of
-              Attorney (SPA).
+              provided on a quote basis and require a Special Power of Attorney
+              (SPA).
               <br />
               <br />
               <strong>What does Empyrean Hospitality do?</strong>
               <br />
               <br />
-              A guest accommodation service for short-term leasing. Availing of
-              Property Management is required and formalized through a
-              Memorandum of Agreement.
+              A guest accommodation service for short-term leasing that requires
+              Property Management and a Memorandum of Agreement.
             </p>
           </div>
         </section>
