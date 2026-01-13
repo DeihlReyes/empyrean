@@ -4,19 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import Image, { type ImageProps } from "next/image";
 
 type Props = Omit<ImageProps, "ref"> & {
-  /** Starting scale at the very top (e.g. 1.08 = 8% bigger) */
-  startScale?: number;
-  /** Minimum scale after scrolling down (e.g. 1.0 = normal size) */
-  endScale?: number;
-  /** How many px of scroll to reach the endScale */
-  scrollRangePx?: number;
+  startScale?: number;     // scale at top (bigger)
+  endScale?: number;       // scale after scrolling (smaller)
+  scrollRangePx?: number;  // px to reach endScale
 };
 
 export default function ScrollScaleIcon({
-  startScale = 1.08,
+  startScale = 1.1,
   endScale = 1.0,
-  scrollRangePx = 420,
+  scrollRangePx = 520,
   className = "",
+  alt, // ensure alt is explicitly received and passed
   ...props
 }: Props) {
   const rafRef = useRef<number | null>(null);
@@ -46,13 +44,14 @@ export default function ScrollScaleIcon({
     };
   }, [startScale, endScale, scrollRangePx]);
 
-  // Wrapper scales; Image keeps float animation & drop-shadow
+  // Wrapper scales; Image keeps float animation & drop shadow
   return (
-    <div
-      style={{ transform: `scale(${scale})` }}
-      className="will-change-transform transition-transform duration-150"
-    >
-      <Image className={className} {...props} />
+    <div style={{ transform: `scale(${scale})` }} className="will-change-transform">
+      <Image
+        {...props}
+        alt={alt ?? ""}  // satisfies jsx-a11y/alt-text even if caller forgets
+        className={className}
+      />
     </div>
   );
 }
