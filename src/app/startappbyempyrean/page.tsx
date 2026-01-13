@@ -32,6 +32,7 @@ export default function BrokerAgentDeveloperPage() {
   return (
     <main className="min-h-screen flex flex-col">
       <div className="container mx-auto px-4 py-16 max-w-5xl">
+        {/* ================= HERO ================= */}
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">
           Start App by Empyrean
         </h1>
@@ -45,11 +46,7 @@ export default function BrokerAgentDeveloperPage() {
               width={480}
               height={480}
               priority
-              className="
-                w-72 md:w-96 lg:w-[420px] h-auto
-                drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
-                animate-[float_6s_ease-in-out_infinite]
-              "
+              className="w-72 md:w-96 lg:w-[420px] h-auto float-icon"
             />
           </div>
         </section>
@@ -58,6 +55,7 @@ export default function BrokerAgentDeveloperPage() {
           You Access Us, You Access Everyone.
         </p>
 
+        {/* ================= INTRO ================= */}
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
           The First Philippine Real Estate SuperApp
         </h2>
@@ -65,14 +63,15 @@ export default function BrokerAgentDeveloperPage() {
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
           Centralising Real Estate starts here. #BetterRealEstate for everyone.
           <br />
-          An additional operating system for Practicioners. In One Central Real
+          An additional operating system for Practitioners. In One Central Real
           Estate Platform.
         </p>
 
+        {/* ================= INVENTORY ================= */}
         <div className="mb-12">
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
-              All listing off and on the market, per city, per street, per
+              All listings off and on the market, per city, per street, per
               building, all units. Easier search, easier filter. With our{" "}
               <strong>Philippine Real Estate Inventory</strong>. You&apos;d only
               need to submit or claim a property listing to receive inquiries
@@ -93,7 +92,7 @@ export default function BrokerAgentDeveloperPage() {
           </ContentCard>
         </div>
 
-        {/* Features Board */}
+        {/* ================= FEATURES ================= */}
         <section className="mb-12" aria-label="Start App Features">
           <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
             <div className="flex items-center justify-between gap-4 mb-5">
@@ -121,17 +120,108 @@ export default function BrokerAgentDeveloperPage() {
           </div>
         </section>
 
+        {/* ================= REPORTING ================= */}
         <div className="mb-12">
           <ContentCard title="Anything wrong? #AccessEmpyrean">
             <>
               Yes. You can finally report to someone.
               <br />
               <br />
-              As a broker, as an agent, as a client. We aim to standardise the
-              industry, we aim to promote good practices. You may always contact
-              us!
+              As a broker, as an agent, as a client — we aim to standardise the
+              industry and promote good practices. You may always contact us.
             </>
           </ContentCard>
         </div>
 
-    {/* FAQs */} <section className="mb-10"> <h2 className="text-2xl font-bold text-center mb-6"> Frequently Asked Questions </h2> <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify"> <p> <strong> How is Start App different from other listing websites? </strong> <br /> <br /> We are not just another listing website, we aim to become the Philippine&apos;s first public multi-listing service complemented with a central platform for both practitioners and clients. Simply put, we can also empower other listing websites with our integrated data. <br /> <br /> <strong> I am a Real Estate Practitioner. How can this app help me? </strong> <br /> <br /> You get to have access to all property listings in our database integrated from multiple sources! <br /> <br /> <strong> I am a Real Estate Practitioner. How can I sign up? </strong> <br /> <br /> We require our Brokers to verify their account. Simply create an account and submit the requirements. Same for agents, only that they must be claimed by respective brokers through an Empyrean Code we will provide them. <br /> <br /> <strong>I am a freelance agent. How can I sign up?</strong> <br /> <br /> We require all practicing agents to urge their brokers to sign up and access our platform for coordination. <br /> <br /> <strong>I am a Client. How can I sign up?</strong> <br /> <br /> Simply create an account in our app to begin coordination. Most of our listings will be claimed by a professional. If your transaction is direct to owner, we will provide you one. <br /> <br /> </p> </div> </section> <p className="text-sm md:text-base text-center mb-16 max-w-4xl mx-auto"> We’re glad to have you with us. For questions or feedback, please contact your Relationship Manager or reach us through our official channels. <br /> <br /> Upwards and onwards, Empyreans! </p> <div className="mt-12"> <CustomSolutions /> </div> </div> <Script id="structured-data" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Service", name: "Property Management Services", provider: { "@type": "Organization", name: "Empyrean", }, description: "Comprehensive property management services including maintenance, leasing, and sales.", offers: { "@type": "Offer", category: "Property Management", description: "End-to-end real estate solutions including keyholding, leasing, and maintenance.", }, serviceType: [ "Property Management", "Maintenance Services", "Property Leasing", "Property Sales", ], areaServed: { "@type": "Country", name: "Philippines", }, }), }} /> </main> ); }
+        {/* ================= FAQ ================= */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Frequently Asked Questions
+          </h2>
+
+          <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify">
+            <p>
+              <strong>
+                How is Start App different from other listing websites?
+              </strong>
+              <br />
+              <br />
+              We are not just another listing website. We aim to become the
+              Philippines&apos; first public multi-listing service complemented
+              with a central platform for both practitioners and clients.
+              <br />
+              <br />
+
+              <strong>
+                I am a Real Estate Practitioner. How can this app help me?
+              </strong>
+              <br />
+              <br />
+              You gain access to all property listings integrated from multiple
+              sources.
+              <br />
+              <br />
+
+              <strong>
+                I am a Real Estate Practitioner. How can I sign up?
+              </strong>
+              <br />
+              <br />
+              Brokers must verify their accounts. Agents must be claimed by
+              brokers using an Empyrean Code.
+              <br />
+              <br />
+
+              <strong>
+                I am a freelance agent. How can I sign up?
+              </strong>
+              <br />
+              <br />
+              We require brokers to be onboarded for coordination.
+              <br />
+              <br />
+
+              <strong>I am a Client. How can I sign up?</strong>
+              <br />
+              <br />
+              Simply create an account in the app to begin.
+            </p>
+          </div>
+        </section>
+
+        {/* ================= FOOTER CTA ================= */}
+        <p className="text-sm md:text-base text-center mb-16 max-w-4xl mx-auto">
+          We’re glad to have you with us.
+          <br />
+          <br />
+          Upwards and onwards, Empyreans!
+        </p>
+
+        <div className="mt-12">
+          <CustomSolutions />
+        </div>
+      </div>
+
+      {/* ================= STRUCTURED DATA ================= */}
+      <Script
+        id="structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            name: "Property Management Services",
+            provider: {
+              "@type": "Organization",
+              name: "Empyrean",
+            },
+            areaServed: {
+              "@type": "Country",
+              name: "Philippines",
+            },
+          }),
+        }}
+      />
+    </main>
+  );
+}
