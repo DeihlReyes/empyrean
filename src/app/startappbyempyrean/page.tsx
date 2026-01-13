@@ -79,7 +79,10 @@ export default function BrokerAgentDeveloperPage() {
         >
           <ContentCard title="Central Platform">
             <>
-              Practicioners go here, clients go here. From the Philippine Real
+              Practicioners go here, clients go here. 
+              <br />
+              <br />
+              From the Philippine Real
               Estate Inventory, you may request availability status and
               coordiante viewings through our application.
             </>
@@ -87,7 +90,10 @@ export default function BrokerAgentDeveloperPage() {
 
           <ContentCard title="Verified Transactions">
             <>
-              Brokers are verified, agents are claimed. Accountability is in our
+              Brokers are verified, agents are claimed. 
+              <br />
+              <br />
+              Accountability is in our
               core values, if you do not have a professional, you will be
               provided one.
             </>
@@ -99,7 +105,7 @@ export default function BrokerAgentDeveloperPage() {
               unlicensed practitioners, or unethical individuals without any
               accountabiltiy! It is dangerous, for anyone. 
               <br />
-<br />
+              <br />
               As central platform,
               we offer in-app city-based group forums, and a very own
               marketplace. From agent to agent, client to agent. This is the
@@ -111,7 +117,10 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="Anything wrong? #AccessEmpyrean">
           <ContentCard title="Anything wrong? #AccessEmpyrean">
             <>
-              Yes. You can finally report to someone. As a broker, as an agent,
+              Yes. You can finally report to someone.
+              <br />
+              <br />
+              As a broker, as an agent,
               as a client. We aim to standardise the industry, we aim to promote
               good practices. You may always contact us!
             </>
@@ -126,28 +135,36 @@ export default function BrokerAgentDeveloperPage() {
 
           <div className="bg-white border border-gray-300 rounded-lg p-8 md:p-12 text-gray-700 text-justify">
             <p>
-              <strong>What is Empyrean Property Management and Hospitality?</strong>
+              <strong>How is Start App different from other listing websites?</strong>
               <br />
               <br />
-              Empyrean’s real estate arm responsible for property management and
-              guest accommodation services.
+              We are not just another listing website, we aim to become the Philippine's first public multi-listing service complemented with a central platform for both practitioners and clients. Simply put, we can also empower other listing websites with our integrated data.
               <br />
               <br />
-              <strong>What does Empyrean Property Management do?</strong>
+              <strong>I am a Real Estate Practitioner. How can this app help me?</strong>
               <br />
               <br />
-              A free-of-charge designation that authorizes Empyrean as Official
-              Property Manager and keyholder, allowing us to manage, lease, and
-              market properties. Maintenance, repair, and cleaning services are
-              provided on a quote basis and require a Special Power of Attorney
-              (SPA).
+              You get to have access to all property listings in our database integrated from multiple sources!
               <br />
               <br />
-              <strong>What does Empyrean Hospitality do?</strong>
+              <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
               <br />
               <br />
-              A guest accommodation service for short-term leasing that requires
-              Property Management and a Memorandum of Agreement.
+              We require our Brokers to verify their account. Simply create and account and submit the requirements. Same for agents, only that they must be claimed by respective brokers through an Empyrean Code.
+              <br />
+              <br />
+              <strong>I am a freelance agent, How can I sign up?</strong>
+              <br />
+              <br />
+              We require all practicing agents to urge their brokers to sign up and access our platform for coordination.
+              <br />
+              <br />
+              <strong>I am a Client. How can I sign up?</strong>
+              <br />
+              <br />
+              Simply create and account in our app to begin coordination. Most of our listings will be claimed by a professional. If your transaction is direct to owner, we will provide you one.
+              <br />
+              <br />
             </p>
           </div>
         </section>
