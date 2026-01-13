@@ -7,18 +7,33 @@ import Script from "next/script";
 import ScrollScaleIcon from "@/components/ScrollScaleIcon";
 import Image from "next/image";
 
+// ✅ Icons for Feature Board
+import {
+  Database,
+  Store,
+  Users,
+  Search,
+  FilePlus2,
+  MessageCircle,
+  ShieldCheck,
+  BarChart3,
+  PlusCircle,
+  Headphones,
+  UserCog,
+} from "lucide-react";
+
 const FEATURES = [
-  "Central Integrated Database",
-  "Real Estate Marketplace",
-  "In-App City Group Forums",
-  "User-friendly Search and Filter",
-  "Easy Claim or Submit Listing",
-  "In-App Smooth Messaging",
-  "Secured and Verified Transactions",
-  "Faster Reporting & Accountability",
-  "Access to Value Added Services",
-  "24/7 Customer Service",
-  "24/7 Partner Admin Support",
+  { label: "Central Integrated Database", icon: Database },
+  { label: "Real Estate Marketplace", icon: Store },
+  { label: "In-App City Group Forums", icon: Users },
+  { label: "User-friendly Search and Filter", icon: Search },
+  { label: "Easy Claim or Submit Listing", icon: FilePlus2 },
+  { label: "In-App Smooth Messaging", icon: MessageCircle },
+  { label: "Secured and Verified Transactions", icon: ShieldCheck },
+  { label: "Faster Reporting & Accountability", icon: BarChart3 },
+  { label: "Access to Value Added Services", icon: PlusCircle },
+  { label: "24/7 Customer Service", icon: Headphones },
+  { label: "24/7 Partner Admin Support", icon: UserCog },
 ];
 
 export default function BrokerAgentDeveloperPage() {
@@ -33,9 +48,7 @@ export default function BrokerAgentDeveloperPage() {
     setActiveImage((current) => {
       if (current === null) return null;
       const idx = screenshots.indexOf(current);
-      const prev =
-        screenshots[(idx - 1 + screenshots.length) % screenshots.length];
-      return prev;
+      return screenshots[(idx - 1 + screenshots.length) % screenshots.length];
     });
   }, [screenshots]);
 
@@ -43,8 +56,7 @@ export default function BrokerAgentDeveloperPage() {
     setActiveImage((current) => {
       if (current === null) return null;
       const idx = screenshots.indexOf(current);
-      const next = screenshots[(idx + 1) % screenshots.length];
-      return next;
+      return screenshots[(idx + 1) % screenshots.length];
     });
   }, [screenshots]);
 
@@ -82,11 +94,8 @@ export default function BrokerAgentDeveloperPage() {
 
     // horizontal swipe only
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx > 0) {
-        goPrev();
-      } else {
-        goNext();
-      }
+      if (dx > 0) goPrev();
+      else goNext();
     }
 
     setTouchStartX(null);
@@ -160,7 +169,7 @@ export default function BrokerAgentDeveloperPage() {
           </ContentCard>
         </div>
 
-        {/* Features Board */}
+        {/* ✅ Features Board (with icons) */}
         <section className="mb-12" aria-label="Start App Features">
           <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
             <div className="flex items-center justify-between gap-4 mb-5">
@@ -173,12 +182,32 @@ export default function BrokerAgentDeveloperPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {FEATURES.map((label) => (
+              {FEATURES.map(({ label, icon: Icon }) => (
                 <div
                   key={label}
-                  className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 hover:bg-white hover:shadow-sm transition"
+                  className="
+                    group flex items-center gap-4
+                    rounded-xl border border-gray-200 bg-gray-50
+                    px-4 py-3
+                    hover:bg-white hover:shadow-sm
+                    transition
+                  "
                 >
-                  <span className="h-2.5 w-2.5 rounded-full bg-gray-400 group-hover:bg-gray-700 transition" />
+                  <div
+                    className="
+                      flex items-center justify-center
+                      w-9 h-9 rounded-lg
+                      bg-white border border-gray-200
+                      text-gray-600
+                      group-hover:text-gray-900
+                      group-hover:border-gray-300
+                      transition
+                    "
+                    aria-hidden="true"
+                  >
+                    <Icon size={18} strokeWidth={1.75} />
+                  </div>
+
                   <div className="text-sm md:text-[15px] font-medium text-gray-800 leading-snug">
                     {label}
                   </div>
@@ -364,7 +393,7 @@ export default function BrokerAgentDeveloperPage() {
               </div>
             </div>
 
-            {/* ✅ FIXED: Image scales down, no forced 9:16 frame, no crop */}
+            {/* ✅ FIXED modal image sizing */}
             <div className="flex items-center justify-center bg-white py-4">
               <div className="relative w-[92vw] max-w-[420px] h-[72vh] sm:h-[78vh]">
                 <Image
