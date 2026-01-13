@@ -14,6 +14,49 @@ export const metadata: Metadata = {
   },
 };
 
+const FEATURES = [
+  {
+    title: "SuperApp for Philippine Real Estate",
+    desc: "One central platform for practitioners and clients — listings, coordination, and support in one place.",
+  },
+  {
+    title: "Central Listing Database",
+    desc: "Access a growing inventory across cities, buildings, and units — off and on the market.",
+  },
+  {
+    title: "User-friendly Search and Filter",
+    desc: "Find the right listing faster with clean filters by location, building, unit details, and more.",
+  },
+  {
+    title: "Verified Transactions",
+    desc: "Brokers are verified. Agents are claimed. Built-in accountability to help protect clients and practitioners.",
+  },
+  {
+    title: "In-App City Groups and Marketplace",
+    desc: "City-based forums and a verified marketplace — safer coordination than random social media groups.",
+  },
+  {
+    title: "In-App Messaging",
+    desc: "Message directly inside the app to coordinate availability, viewings, and next steps.",
+  },
+  {
+    title: "24/7 Customer Service and Admin Support",
+    desc: "Get help anytime — escalations, reporting, and admin support when you need it.",
+  },
+  {
+    title: "Easy Claim or Submit Listing",
+    desc: "Claim a listing if you represent it, or submit one to receive inquiries from the market.",
+  },
+  {
+    title: "Faster Reporting and Accountability",
+    desc: "Report issues quickly with a clear escalation path — we enforce better practices.",
+  },
+  {
+    title: "Access to Verified Added Services",
+    desc: "Tap into vetted services to support transactions and property-related needs.",
+  },
+];
+
 export default function BrokerAgentDeveloperPage() {
   return (
     <main className="min-h-screen flex flex-col">
@@ -23,7 +66,10 @@ export default function BrokerAgentDeveloperPage() {
         </h1>
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-          Centralising Real Estate starts here. #BetterRealEstate for everyone. <br /> An additional operating system for Practicioners. In One Central Real Estate Platform.
+          Centralising Real Estate starts here. #BetterRealEstate for everyone.
+          <br />
+          An additional operating system for Practicioners. In One Central Real
+          Estate Platform.
         </p>
 
         {/* Branding Section */}
@@ -43,9 +89,9 @@ export default function BrokerAgentDeveloperPage() {
         <p className="text-sm md:text-base text-center mb-14 max-w-4xl mx-auto">
           You Access Us, You Access Everyone.
         </p>
-        
-<div className="mb-12">
-            <ContentCard title="Access to All Property Listings in the Philippines">
+
+        <div className="mb-12">
+          <ContentCard title="Access to All Property Listings in the Philippines">
             <>
               All listing off and on the market, per city, per street, per
               building, all units. Easier search, easier filter. With our{" "}
@@ -68,61 +114,30 @@ export default function BrokerAgentDeveloperPage() {
           </ContentCard>
         </div>
 
-        {/* ✅ 3 cards in one row — STANDARDISED HEIGHT */}
-        <section
-          className="mb-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-          aria-label="Central Platform Features"
-        >
-          <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="SuperApp for Philippine Real Estate">
-            </ContentCard>
+        {/* ✅ Features Section (cleaner, less “ugly”, consistent) */}
+        <section className="mb-12" aria-label="Start App Features">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold">App Features</h2>
+            <p className="text-sm md:text-base text-gray-600 mt-2 max-w-3xl mx-auto">
+              Built to make real estate coordination faster, safer, and more
+              accountable — for everyone.
+            </p>
           </div>
 
-          <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="Central Listing Database">
-            </ContentCard>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {FEATURES.map((f) => (
+              <div
+                key={f.title}
+                className="h-full [&>div]:h-full [&>div]:p-5 md:[&>div]:p-6"
+              >
+                <ContentCard title={f.title}>
+                  <p className="text-sm md:text-[15px] text-gray-700 leading-relaxed">
+                    {f.desc}
+                  </p>
+                </ContentCard>
+              </div>
+            ))}
           </div>
-
-           <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="User-friendly Search and Filter">
-            </ContentCard>
-          </div>
-
-          <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="Verified Transactions">
-            </ContentCard>
-          </div>
-
-          <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="In-App City Groups and Marketplace">
-            </ContentCard>
-          </div>
-
-          <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="In-App Messaging">
-            </ContentCard>
-          </div>
-
-            <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="24/7 Customer Service and Admin Support">
-            </ContentCard>
-          </div>
-
-            <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="Easy Claim or Submit Listing">
-            </ContentCard>
-          </div>
-
-           <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="Faster Reporting and Accountability">
-            </ContentCard>
-          </div>
-
-              <div className="h-full [&>div]:h-full [&>div]:p-6 md:[&>div]:p-7">
-            <ContentCard title="Access to Verified Added Services">
-            </ContentCard>
-          </div>
-          
         </section>
 
         <div className="mb-12">
