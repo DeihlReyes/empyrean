@@ -4,20 +4,23 @@ import { useEffect, useRef, useState } from "react";
 import Image, { type ImageProps } from "next/image";
 
 type Props = Omit<ImageProps, "ref"> & {
-  /** Max extra scale added by scrolling (e.g. 0.06 = up to 6% bigger) */
-  maxScaleIncrease?: number;
-  /** How many px of scroll to reach max scale */
+  /** Starting scale at the very top (e.g. 1.08 = 8% bigger) */
+  startScale?: number;
+  /** Minimum scale after scrolling down (e.g. 1.0 = normal size) */
+  endScale?: number;
+  /** How many px of scroll to reach the endScale */
   scrollRangePx?: number;
 };
 
 export default function ScrollScaleIcon({
-  maxScaleIncrease = 0.06,
+  startScale = 1.08,
+  endScale = 1.0,
   scrollRangePx = 420,
   className = "",
   ...props
 }: Props) {
   const rafRef = useRef<number | null>(null);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(startScale);
 
   useEffect(() => {
     const onScroll = () => {
@@ -27,32 +30,27 @@ export default function ScrollScaleIcon({
         rafRef.current = null;
 
         const y = window.scrollY || 0;
-        const t = Math.min(1, Math.max(0, y / scrollRangePx));
-        const nextScale = 1 + maxScaleIncrease * t;
+        const t = Math.min(1, Math.max(0, y / scrollRangePx)); // 0 -> 1
+        const nextScale = startScale + (endScale - startScale) * t; // shrink
 
         setScale(nextScale);
       });
     };
 
-    onScroll(); // initialize
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (rafRef.current) window.cancelAnimationFrame(rafRef.current);
     };
-  }, [maxScaleIncrease, scrollRangePx]);
+  }, [startScale, endScale, scrollRangePx]);
 
-  /**
-   * IMPORTANT:
-   * - Float animation uses transform on the Image element.
-   * - Scroll scaling also needs transform.
-   * So we apply scale on a WRAPPER div, and keep float on the Image itself.
-   */
+  // Wrapper scales; Image keeps float animation & drop-shadow
   return (
     <div
       style={{ transform: `scale(${scale})` }}
-      className="transition-transform duration-150 will-change-transform"
+      className="will-change-transform transition-transform duration-150"
     >
       <Image className={className} {...props} />
     </div>
