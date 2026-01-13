@@ -37,13 +37,6 @@ export default function BrokerAgentDeveloperPage() {
           Start App by Empyrean
         </h1>
 
-        <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-          Centralising Real Estate starts here. #BetterRealEstate for everyone.
-          <br />
-          An additional operating system for Practicioners. In One Central Real
-          Estate Platform.
-        </p>
-
         {/* Branding Section */}
         <section className="mb-4">
           <div className="flex justify-center mt-2">
@@ -65,7 +58,14 @@ export default function BrokerAgentDeveloperPage() {
  <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
             The First Philippine Real Estate SuperApp
           </h2>
-        
+       
+        <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
+          Centralising Real Estate starts here. #BetterRealEstate for everyone.
+          <br />
+          An additional operating system for Practicioners. In One Central Real
+          Estate Platform.
+        </p>
+
         <div className="mb-12">
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
