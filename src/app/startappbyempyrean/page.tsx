@@ -76,9 +76,7 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="Central Platform for All">
           <ContentCard title="Central Platform">
             <>
-              Aside from our database, we would also have in-app city-based
-              forums, and a very own marketplace. From agent to agent, client to
-              agent. This is the central platform for Philippine Real Estate.
+              Practicioners go here, clients go here. From the Philippine Real Estate Inventory, you may request availability status and coordiante viewings through our application.
             </>
           </ContentCard>
         </div>
@@ -86,25 +84,29 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="Verified Transactions">
           <ContentCard title="Verified Transactions">
             <>
-              Accountability is in our core values. All agents in the App will be
-              claimed by their respective verified brokers. All client to owner
-              inquiries are provided a professional; and if there is any
-              problems, you can finally report to someone! Just #AccessEmpyrean.
+              Brokers are verified, agents are claimed. Accountability is in our core values, if you do not have a professional, you will be provided one.
             </>
           </ContentCard>
         </div>
 
-        <div className="mb-12" aria-label="Transparency and Reporting">
-          <ContentCard title="Transparency and Reporting">
+        <div className="mb-12" aria-label="In-App City-based Groups and Verified Marketplace">
+          <ContentCard title="In-App City-based Groups and Verified Marketplace">
             <>
-              We value accountability and transparency. Property owners are
-              provided access to a Google Sheet to monitor bookings and payout
-              schedules. A centralized platform is currently in development to
-              replace this system.
+              Exploring in Social Media Groups and Marketplace is dangerous, as central platform, we offer in-app city-based
+              group forums, and a very own marketplace. From agent to agent, client to
+              agent. This is the central platform for Philippine Real Estate.
             </>
           </ContentCard>
         </div>
 
+        <div className="mb-12" aria-label="In-App City-based Groups and Verified Marketplace">
+          <ContentCard title="Anything wrong? #AccessEmpyrean">
+            <>
+              Yes. You can finally report to someone. As a broker, as an agent, as a client. We aim to standardise the industry, we aim to promote good practices. You may always contact us!
+            </>
+          </ContentCard>
+        </div>
+        
         {/* FAQs */}
         <section className="mb-10">
           <h2 className="text-2xl font-bold text-center mb-6">
