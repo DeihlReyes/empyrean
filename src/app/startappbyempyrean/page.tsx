@@ -23,9 +23,9 @@ const FEATURES = [
   "In-App Smooth Messaging",
   "Secured and Verified Transactions",
   "Faster Reporting & Accountability",
+  "Access to Value Added Services",
   "24/7 Customer Service",
   "24/7 Partner Admin Support",
-  "Access to Value Added Services",
 ];
 
 export default function BrokerAgentDeveloperPage() {
