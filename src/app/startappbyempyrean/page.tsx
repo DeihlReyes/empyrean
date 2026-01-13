@@ -93,11 +93,14 @@ export default function BrokerAgentDeveloperPage() {
             </>
           </ContentCard>
 
-          <ContentCard title="In-App City-based Groups and Verified Marketplace">
+          <ContentCard title="In-App City-based Groups and Marketplace">
             <>
               Exploring in Social Media Groups and Marketplace is filled with
               unlicensed practitioners, or unethical individuals without any
-              accountabiltiy! It is dangerous, for anyone. As central platform,
+              accountabiltiy! It is dangerous, for anyone. 
+              <br />
+<br />
+              As central platform,
               we offer in-app city-based group forums, and a very own
               marketplace. From agent to agent, client to agent. This is the
               central platform for Philippine Real Estate.
