@@ -22,7 +22,6 @@ export default function BrokerAgentDeveloperPage() {
           Start App by Empyrean
         </h1>
 
-        {/* reduced spacing below */}
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
           Centralising Real Estate starts here. #BetterRealEstate for everyone!
           Practitioners, Clients, and Business Owners.
@@ -30,18 +29,16 @@ export default function BrokerAgentDeveloperPage() {
 
         {/* Branding Section */}
         <section className="mb-4">
-
-          {/* larger icon + drop shadow */}
           <div className="flex justify-center mt-2">
             <Image
               src="/assets/startappicon.png"
               alt="Start App by Empyrean"
-              width={320}
-              height={320}
+              width={480}
+              height={480}
               priority
               className="
-                w-56 md:w-72 h-auto
-                drop-shadow-[0_14px_30px_rgba(0,0,0,0.28)]
+                w-72 md:w-96 lg:w-[420px] h-auto
+                drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
               "
             />
           </div>
@@ -50,11 +47,28 @@ export default function BrokerAgentDeveloperPage() {
         <p className="text-sm md:text-base text-center mb-14 max-w-4xl mx-auto">
           You Access Us, You Access Everyone.
         </p>
-        
+
         <div className="mb-12" aria-label="The Business Partnership Offer">
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
-            All listing off and on the market, per city, per street, per building, all units. With our <strong>Philippine Real Estate Inventory</strong>. You&apos;d only need to submit or claim a property listing to receive inquiries from other practitioners and clients!
+              All listing off and on the market, per city, per street, per
+              building, all units. With our{" "}
+              <strong>Philippine Real Estate Inventory</strong>. You&apos;d only
+              need to submit or claim a property listing to receive inquiries
+              from other practitioners and clients!
+              <br />
+              <br />
+              You may also access the Inventory below.
+              
+<div className="flex justify-end mt-4">
+                <a
+                  href="https://empyrean.ph/philippinerealestateinventory"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm hover:bg-gray-300 transition"
+                >
+                  Philippine Real Estate Inventory
+                </a>
+              </div>
             </>
           </ContentCard>
         </div>
@@ -62,7 +76,9 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="Central Platform for All">
           <ContentCard title="Central Platform">
             <>
-              Aside from our database, we would also have in-app city-based forums, and a very own marketplace. From agent to agent, client to agent. This is the central platform for Philippine Real Estate.
+              Aside from our database, we would also have in-app city-based
+              forums, and a very own marketplace. From agent to agent, client to
+              agent. This is the central platform for Philippine Real Estate.
             </>
           </ContentCard>
         </div>
@@ -70,7 +86,10 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="Verified Transactions">
           <ContentCard title="Verified Transactions">
             <>
-              Accountability is in our core values. All agents in the App will be claimed by their respective verified brokers. All client to owner inquiries are provided a professional; and if there is any problems, you can finally report to someone! Just #AccessEmpyrean.
+              Accountability is in our core values. All agents in the App will be
+              claimed by their respective verified brokers. All client to owner
+              inquiries are provided a professional; and if there is any
+              problems, you can finally report to someone! Just #AccessEmpyrean.
             </>
           </ContentCard>
         </div>
