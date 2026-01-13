@@ -15,7 +15,6 @@ export const metadata: Metadata = {
 };
 
 const FEATURES = [
-  "Real Estate SuperApp",
   "Central Integrated Database",
   "Real Estate Marketplace",
   "In-App City Group Forums",
