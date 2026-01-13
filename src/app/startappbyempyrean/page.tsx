@@ -72,12 +72,11 @@ export default function BrokerAgentDeveloperPage() {
           </ContentCard>
         </div>
 
-        {/* ✅ 3 cards in one row (md+) */}
+        {/* ✅ 3 cards in one row (md+) with reduced padding and natural height */}
         <section
-          className="mb-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+          className="mb-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-start"
           aria-label="Central Platform Features"
         >
-          {/* ✅ Reduced internal padding by wrapping content */}
           <div className="[&>div]:p-6 md:[&>div]:p-7">
             <ContentCard title="Central Platform">
               <>
@@ -161,16 +160,18 @@ export default function BrokerAgentDeveloperPage() {
               integrated from multiple sources!
               <br />
               <br />
-              <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
+              <strong>
+                I am a Real Estate Practitioner. How can I sign up?
+              </strong>
               <br />
               <br />
-              We require our Brokers to verify their account. Simply create and
+              We require our Brokers to verify their account. Simply create an
               account and submit the requirements. Same for agents, only that
               they must be claimed by respective brokers through an Empyrean
               Code we will provide them.
               <br />
               <br />
-              <strong>I am a freelance agent, How can I sign up?</strong>
+              <strong>I am a freelance agent. How can I sign up?</strong>
               <br />
               <br />
               We require all practicing agents to urge their brokers to sign up
@@ -180,7 +181,7 @@ export default function BrokerAgentDeveloperPage() {
               <strong>I am a Client. How can I sign up?</strong>
               <br />
               <br />
-              Simply create and account in our app to begin coordination. Most
+              Simply create an account in our app to begin coordination. Most
               of our listings will be claimed by a professional. If your
               transaction is direct to owner, we will provide you one.
               <br />
