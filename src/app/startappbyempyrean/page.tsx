@@ -62,6 +62,10 @@ export default function BrokerAgentDeveloperPage() {
           You Access Us, You Access Everyone.
         </p>
 
+ <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
+            The First Philippine Real Estate SuperApp
+          </h2>
+        
         <div className="mb-12">
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
