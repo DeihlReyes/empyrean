@@ -48,10 +48,11 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12">
           <ContentCard title="Who can use the Application?">
             <>
-              Everyone. It is an additional operating system for Practicioners, it is the raw market for all Clients, they all get a place in the platform.
+              Everyone. <br /><br />It is an additional operating system for Practicioners, it is the raw market for all Clients, they all get a place in the platform.
             </>
-          </ContentCard>
-
+          </ContentCard></div>
+        
+<div className="mb-12">
             <ContentCard title="Access to All Property Listings in the Philippines">
             <>
               All listing off and on the market, per city, per street, per
