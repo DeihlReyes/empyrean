@@ -19,7 +19,7 @@ export default function BrokerAgentDeveloperPage() {
     <main className="min-h-screen flex flex-col">
       <div className="container mx-auto px-4 py-16 max-w-5xl">
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">
-          Start App by Empyrean!
+          Start App by Empyrean
         </h1>
 
         {/* reduced spacing below */}
@@ -30,9 +30,6 @@ export default function BrokerAgentDeveloperPage() {
 
         {/* Branding Section */}
         <section className="mb-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
-            The Empyrean Hospitality Branding
-          </h2>
 
           {/* larger icon + drop shadow */}
           <div className="flex justify-center mt-2">
@@ -54,6 +51,10 @@ export default function BrokerAgentDeveloperPage() {
           You Access Us, You Access Everyone.
         </p>
 
+  <h2 className="text-xl md:text-xl font-bold text-center mb-4">
+            Application Features
+          </h2>
+        
         <div className="mb-12" aria-label="The Business Partnership Offer">
           <ContentCard title="The Business Partnership Offer">
             <>
