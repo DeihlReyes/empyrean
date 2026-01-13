@@ -16,12 +16,13 @@ export const metadata: Metadata = {
 
 const FEATURES = [
   "Real Estate SuperApp",
-  "Central Listing Database",
+  "Central Integrated Database",
+  "Real Estate Marketplace",
+  "In-App City Groups",
   "User-friendly Search and Filter",
   "Secured and Verified Transactions",
-  "In-App City Groups and Real Estate Marketplace",
   "In-App Smooth Messaging",
-  "24/7 Customer Service and Admin Support",
+  "24/7 Customer Service & Admin Support",
   "Easy Claim or Submit Listing",
   "Faster Reporting and Legal Accountability",
   "Access to Value Added Services",
