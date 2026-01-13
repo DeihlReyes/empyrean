@@ -52,7 +52,7 @@ export default function BrokerAgentDeveloperPage() {
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
               All listing off and on the market, per city, per street, per
-              building, all units. With our{" "}
+              building, all units. Easier search, easier filter. With our{" "}
               <strong>Philippine Real Estate Inventory</strong>. You&apos;d only
               need to submit or claim a property listing to receive inquiries
               from other practitioners and clients!
@@ -92,7 +92,7 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="In-App City-based Groups and Verified Marketplace">
           <ContentCard title="In-App City-based Groups and Verified Marketplace">
             <>
-              Exploring in Social Media Groups and Marketplace is dangerous, as central platform, we offer in-app city-based
+              Exploring in Social Media Groups and Marketplace is filled with unlicensed practitioners, or unethical individuals without any accountabiltiy! It is dangerous, for anyone. As central platform, we offer in-app city-based
               group forums, and a very own marketplace. From agent to agent, client to
               agent. This is the central platform for Philippine Real Estate.
             </>
