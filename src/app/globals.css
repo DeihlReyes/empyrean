@@ -82,12 +82,8 @@ h6 {
    =============================== */
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
 }
 
 .float-icon {
@@ -97,8 +93,5 @@ h6 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .float-icon {
-    animation: none;
-  }
+  .float-icon { animation: none; }
 }
-
