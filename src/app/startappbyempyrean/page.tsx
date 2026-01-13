@@ -46,7 +46,13 @@ export default function BrokerAgentDeveloperPage() {
         </p>
 
         <div className="mb-12">
-          <ContentCard title="Access to All Property Listings in the Philippines">
+          <ContentCard title="Who can use the Application?">
+            <>
+              Everyone. It is an additional operating system for Practicioners, it is the raw market for all Clients, they all get a place in the platform.
+            </>
+          </ContentCard>
+
+            <ContentCard title="Access to All Property Listings in the Philippines">
             <>
               All listing off and on the market, per city, per street, per
               building, all units. Easier search, easier filter. With our{" "}
