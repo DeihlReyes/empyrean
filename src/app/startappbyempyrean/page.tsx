@@ -256,7 +256,7 @@ export default function BrokerAgentDeveloperPage() {
               <br />
               <br />
               You get to have access to all property listings in our database
-              integrated from multiple sources!
+              integrated from multiple sources. No need to go to facebook, or post online (or you still may). Eitherway, the app will empower you further! Close deals faster.
               <br />
               <br />
               <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
