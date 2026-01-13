@@ -138,7 +138,7 @@ export default function BrokerAgentDeveloperPage() {
               <strong>How is Start App different from other listing websites?</strong>
               <br />
               <br />
-              We are not just another listing website, we aim to become the Philippine's first public multi-listing service complemented with a central platform for both practitioners and clients. Simply put, we can also empower other listing websites with our integrated data.
+              We are not just another listing website, we aim to become the Philippine&apos;s first public multi-listing service complemented with a central platform for both practitioners and clients. Simply put, we can also empower other listing websites with our integrated data.
               <br />
               <br />
               <strong>I am a Real Estate Practitioner. How can this app help me?</strong>
@@ -150,7 +150,7 @@ export default function BrokerAgentDeveloperPage() {
               <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
               <br />
               <br />
-              We require our Brokers to verify their account. Simply create and account and submit the requirements. Same for agents, only that they must be claimed by respective brokers through an Empyrean Code.
+              We require our Brokers to verify their account. Simply create and account and submit the requirements. Same for agents, only that they must be claimed by respective brokers through an Empyrean Code we will provide them.
               <br />
               <br />
               <strong>I am a freelance agent, How can I sign up?</strong>
