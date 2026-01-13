@@ -54,7 +54,7 @@ export default function BrokerAgentDeveloperPage() {
         <div className="mb-12" aria-label="The Business Partnership Offer">
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
-            All listing off and on the market, per city, per street, per building, all units. With our <strong>Philippine Real Estate Inventory</strong>. You'd only need to submit or claim a property listing to receive inquiries from other practitioners and clients!
+            All listing off and on the market, per city, per street, per building, all units. With our <strong>Philippine Real Estate Inventory</strong>. You&apos;d only need to submit or claim a property listing to receive inquiries from other practitioners and clients!
             </>
           </ContentCard>
         </div>
