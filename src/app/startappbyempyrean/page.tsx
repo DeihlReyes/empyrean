@@ -22,9 +22,10 @@ const FEATURES = [
   "User-friendly Search and Filter",
   "Secured and Verified Transactions",
   "In-App Smooth Messaging",
-  "24/7 Customer Service & Admin Support",
   "Easy Claim or Submit Listing",
-  "Faster Reporting and Legal Accountability",
+  "Faster Reporting and Accountability",
+  "24/7 Customer Service",
+  "24/7 Partner Admin Support",
   "Access to Value Added Services",
 ];
 
