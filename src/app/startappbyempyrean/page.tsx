@@ -15,16 +15,16 @@ export const metadata: Metadata = {
 };
 
 const FEATURES = [
-  "SuperApp for Philippine Real Estate",
+  "Real Estate SuperApp",
   "Central Listing Database",
   "User-friendly Search and Filter",
-  "Verified Transactions",
-  "In-App City Groups and Marketplace",
-  "In-App Messaging",
+  "Secured and Verified Transactions",
+  "In-App City Groups and Real Estate Marketplace",
+  "In-App Smooth Messaging",
   "24/7 Customer Service and Admin Support",
   "Easy Claim or Submit Listing",
-  "Faster Reporting and Accountability",
-  "Access to Verified Added Services",
+  "Faster Reporting and Legal Accountability",
+  "Access to Value Added Services",
 ];
 
 export default function BrokerAgentDeveloperPage() {
@@ -86,22 +86,6 @@ export default function BrokerAgentDeveloperPage() {
 
         {/* ✅ Redesigned Features Section (titles only, looks clean) */}
         <section className="mb-12" aria-label="Start App Features">
-          {/* Top row: heading card + quick summary card (no extra copy needed) */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div className="lg:col-span-2">
-              <ContentCard title="Start App Features">
-                <div className="text-sm md:text-base text-gray-700">
-                  A quick overview of what the app includes.
-                </div>
-              </ContentCard>
-            </div>
-            <ContentCard title="Built for Coordination">
-              <div className="text-sm md:text-base text-gray-700">
-                One platform, one workflow, one standard.
-              </div>
-            </ContentCard>
-          </div>
-
           {/* Main feature board: “chips” inside a styled board */}
           <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
             <div className="flex items-center justify-between gap-4 mb-5">
