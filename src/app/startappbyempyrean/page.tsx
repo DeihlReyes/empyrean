@@ -24,7 +24,7 @@ export default function BrokerAgentDeveloperPage() {
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
           Centralising Real Estate starts here. #BetterRealEstate for everyone!
-          Practitioners, Clients, and Business Owners.
+          Practitioners or Clients, for All Key Players.
         </p>
 
         {/* Branding Section */}
