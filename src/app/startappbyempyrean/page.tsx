@@ -1,19 +1,11 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import { ContentCard } from "@/components/content-card";
 import CustomSolutions from "@/components/custom-solutions";
-import { Metadata } from "next";
 import Script from "next/script";
 import ScrollScaleIcon from "@/components/ScrollScaleIcon";
 import Image from "next/image";
-
-export const metadata: Metadata = {
-  title: "Start App by Empyrean | Empyrean Real Estate Solutions",
-  description: "Learn more about Start App by Empyrean",
-  openGraph: {
-    title: "Start App by Empyrean | Empyrean Real Estate Solutions",
-    description: "Learn more about Start App by Empyrean",
-    type: "website",
-  },
-};
 
 const FEATURES = [
   "Central Integrated Database",
@@ -30,6 +22,70 @@ const FEATURES = [
 ];
 
 export default function BrokerAgentDeveloperPage() {
+  const screenshots = useMemo(
+    () => Array.from({ length: 10 }, (_, i) => i + 1),
+    []
+  );
+
+  const [activeImage, setActiveImage] = useState<number | null>(null);
+
+  const goPrev = () => {
+    if (activeImage === null) return;
+    const idx = screenshots.indexOf(activeImage);
+    const prev = screenshots[(idx - 1 + screenshots.length) % screenshots.length];
+    setActiveImage(prev);
+  };
+
+  const goNext = () => {
+    if (activeImage === null) return;
+    const idx = screenshots.indexOf(activeImage);
+    const next = screenshots[(idx + 1) % screenshots.length];
+    setActiveImage(next);
+  };
+
+  // Keyboard navigation: ESC closes, arrows navigate
+  useEffect(() => {
+    if (activeImage === null) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveImage(null);
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeImage]);
+
+  // Simple touch swipe on the modal
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null || touchStartY === null) return;
+
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+
+    const dx = endX - touchStartX;
+    const dy = endY - touchStartY;
+
+    // horizontal swipe only
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 0) goPrev();
+      else goNext();
+    }
+
+    setTouchStartX(null);
+    setTouchStartY(null);
+  };
+
   return (
     <main className="min-h-screen flex flex-col">
       <div className="container mx-auto px-4 py-16 max-w-5xl">
@@ -46,9 +102,9 @@ export default function BrokerAgentDeveloperPage() {
               width={480}
               height={480}
               priority
-              startScale={1.1} // bigger while viewing at top
-              endScale={1.0} // shrink as you scroll down
-              scrollRangePx={520} // smoothness range
+              startScale={1.1}
+              endScale={1.0}
+              scrollRangePx={520}
               className="
                 w-72 md:w-96 lg:w-[420px] h-auto
                 drop-shadow-[0_20px_45px_rgba(0,0,0,0.32)]
@@ -199,57 +255,49 @@ export default function BrokerAgentDeveloperPage() {
           Application Rough Snapshots
         </h2>
 
-        {/* Application Rough Snapshots – Stacked Collage */}
+        {/* Clickable Collage */}
         <section className="mb-16">
           <div className="relative mx-auto max-w-5xl">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {Array.from({ length: 10 }, (_, i) => {
-                const index = i + 1;
-
-                return (
-                  <div
-                    key={index}
-                    className="
-                      relative rounded-2xl overflow-hidden
-                      border border-gray-200 bg-white
-                      shadow-md hover:shadow-xl
-                      transition-transform duration-300
-                      hover:-translate-y-1
-                    "
-                  >
-                    {/* Fixed ratio so the grid is stable; image never crops */}
-                    <div className="relative w-full aspect-[9/16] bg-white">
-                      <Image
-                        src={`/assets/SS${index}.png`}
-                        alt={`Start App Screenshot ${index}`}
-                        fill
-                        className="object-contain"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                        // If SS6 is missing/misnamed, this helps by falling back to .jpg
-                        onError={(e) => {
-                          // Next/Image uses an underlying <img> in the DOM at runtime
-                          // so we can swap the src on error for a fallback.
-                          const target = e.target as HTMLImageElement;
-                          if (!target.src.endsWith(`SS${index}.jpg`)) {
-                            target.src = `/assets/SS${index}.jpg`;
-                          }
-                        }}
-                      />
-                    </div>
-
-                    {/* Label so you can immediately see which file is missing */}
-                    <div className="px-3 py-2 border-t border-gray-100">
-                      <div className="text-xs text-gray-500">SS{index}</div>
-                    </div>
+              {screenshots.map((index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setActiveImage(index)}
+                  className="
+                    relative rounded-2xl overflow-hidden
+                    border border-gray-200 bg-white
+                    shadow-md hover:shadow-xl
+                    transition-transform duration-300
+                    hover:-translate-y-1
+                    focus:outline-none
+                  "
+                >
+                  <div className="relative w-full aspect-[9/16] bg-white">
+                    <Image
+                      src={`/assets/SS${index}.png`}
+                      alt={`Start App Screenshot ${index}`}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (!target.src.endsWith(`SS${index}.jpg`)) {
+                          target.src = `/assets/SS${index}.jpg`;
+                        }
+                      }}
+                    />
                   </div>
-                );
-              })}
+
+                  <div className="px-3 py-2 border-t border-gray-100">
+                    <div className="text-xs text-gray-500">SS{index}</div>
+                  </div>
+                </button>
+              ))}
             </div>
 
             <p className="text-xs text-gray-500 mt-4 text-center">
-              Note: Files must be inside <strong>/public/assets/</strong> and
-              match the exact name (case-sensitive):{" "}
-              <strong>SS1.png … SS10.png</strong>.
+              Tip: Swipe left/right in the fullscreen viewer to browse screenshots.
             </p>
           </div>
         </section>
@@ -258,6 +306,83 @@ export default function BrokerAgentDeveloperPage() {
           <CustomSolutions />
         </div>
       </div>
+
+      {/* Fullscreen Modal Viewer */}
+      {activeImage !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 sm:p-6"
+          onClick={() => setActiveImage(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Screenshot viewer"
+        >
+          <div
+            className="relative w-full max-w-md sm:max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+          >
+            {/* Header / Controls */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+              <div className="text-xs text-gray-500">
+                SS{activeImage} / {screenshots.length}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-800 text-sm hover:bg-gray-200 transition"
+                  aria-label="Previous screenshot"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-800 text-sm hover:bg-gray-200 transition"
+                  aria-label="Next screenshot"
+                >
+                  →
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveImage(null)}
+                  className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-sm hover:bg-black transition"
+                  aria-label="Close viewer"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Image */}
+            <div className="relative w-full aspect-[9/16] bg-white">
+              <Image
+                src={`/assets/SS${activeImage}.png`}
+                alt={`Start App Screenshot ${activeImage}`}
+                fill
+                className="object-contain"
+                priority
+                sizes="100vw"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.endsWith(`SS${activeImage}.jpg`)) {
+                    target.src = `/assets/SS${activeImage}.jpg`;
+                  }
+                }}
+              />
+            </div>
+
+            {/* Footer hint */}
+            <div className="px-4 py-3 border-t border-gray-100 text-center">
+              <div className="text-xs text-gray-500">
+                Swipe left/right or use arrow keys to navigate • ESC to close
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Script
         id="structured-data"
