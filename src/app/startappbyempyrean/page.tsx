@@ -169,14 +169,39 @@ export default function BrokerAgentDeveloperPage() {
           </div>
         </section>
 
-        <p className="text-sm md:text-base text-center mb-16 max-w-4xl mx-auto">
-          We’re glad to have you with us. For questions or feedback, please
-          contact your Relationship Manager or reach us through our official
-          channels.
-          <br />
-          <br />
-          Upwards and onwards, Empyreans!
-        </p>
+        <h2 className="text-2xl font-bold text-center mb-6">
+            Application Rough Snapshots
+          </h2>
+
+        {/* Application Rough Snapshots – Stacked Collage */}
+<section className="mb-16">
+  <div className="relative mx-auto max-w-5xl">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      {Array.from({ length: 10 }, (_, i) => {
+        const index = i + 1;
+        return (
+          <div
+            key={index}
+            className="
+              relative rounded-2xl overflow-hidden
+              border border-gray-200 bg-white
+              shadow-md hover:shadow-xl
+              transition-transform duration-300
+              hover:-translate-y-1
+            "
+          >
+            <img
+              src={`/assets/SS${index}.png`}
+              alt={`Start App Screenshot ${index}`}
+              className="w-full h-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
         <div className="mt-12">
           <CustomSolutions />
