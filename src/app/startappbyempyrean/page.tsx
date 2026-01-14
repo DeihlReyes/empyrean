@@ -140,10 +140,12 @@ export default function BrokerAgentDeveloperPage() {
         </h2>
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-          Centralising Real Estate starts here. #BetterRealEstate for everyone.
+          Centralising Real Estate starts here.
           <br />
-          An additional operating system for Practicioners. In One Central Real
-          Estate Platform.
+          Every Property Listings on and off-the-market. Integrated Database.
+          <br />
+          An additional operating system for Practicioners. A Marketplace for Clients. 
+          <br />In One Central Platform.
         </p>
 
         <div className="mb-12">
