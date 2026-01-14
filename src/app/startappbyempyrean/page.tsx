@@ -111,8 +111,7 @@ export default function BrokerAgentDeveloperPage() {
         </h1>
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-          Simpler way of exploring the market.
-        </p>
+A Unified System where properties, practitioners, and transactions live</p>
 
         {/* Branding Section */}
         <section className="mb-4">
