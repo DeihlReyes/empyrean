@@ -144,10 +144,10 @@ export default function BrokerAgentDeveloperPage() {
         </h2>
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-          Every Property Listings.
+          Each and Every Property Listings.
           <br />
-          Verified Practitioners. 
-          <br /><br />
+          All Verified Practitioners. 
+          <br />
           <strong>One Central Platform.</strong> 
         </p>
 
