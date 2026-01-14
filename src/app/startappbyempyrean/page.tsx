@@ -416,9 +416,19 @@ export default function BrokerAgentDeveloperPage() {
             {/* Footer hint */}
             <div className="px-4 py-3 border-t border-gray-100 text-center">
               <div className="text-xs text-gray-500">
-                Swipe left/right or use arrow keys to navigate • ESC to close
+                Swipe left/right or use arrow keys to navigate
               </div>
             </div>
+
+               <div className="flex justify-center">
+          <Button
+            asChild
+            className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
+          >
+            <Link href="https://form.jotform.com/260127945833461">Join our Waiting List</Link>
+          </Button>
+        </div>
+            
           </div>
         </div>
       )}
