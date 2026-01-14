@@ -244,11 +244,10 @@ export default function BrokerAgentDeveloperPage() {
               </strong>
               <br />
               <br />
-              We are not just another listing website, we aim to become the
+              We aim to become the Philippine Infrustructure for Philippine Real Estate. From accomplishing the inventory to handling ongoing contracts. The central platform, the
               Philippine&apos;s first public multi-listing service complemented
-              with a central platform for both practitioners and clients. Simply
-              put, we can also empower other listing websites with our
-              integrated data.
+              with a program for practitioners and clients. Simply
+              put, we aim to become the backbone of Real Estate Operations in the Philippines.
               <br />
               <br />
               <strong>
