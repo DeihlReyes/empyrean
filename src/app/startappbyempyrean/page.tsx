@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 import { ContentCard } from "@/components/content-card";
@@ -10,7 +9,6 @@ import Script from "next/script";
 import ScrollScaleIcon from "@/components/ScrollScaleIcon";
 import Image from "next/image";
 
-// ✅ Icons for Feature Board
 import {
   Database,
   Store,
