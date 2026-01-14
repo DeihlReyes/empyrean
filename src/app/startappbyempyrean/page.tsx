@@ -142,14 +142,6 @@ Your Real Estate Journey, in one place.</p>
           The Philippine Real Estate in your pocket.
         </h2>
 
-        <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-          Each and Every Property Listings.
-          <br />
-          All Verified Practitioners. 
-          <br />
-          <strong>One Central Platform.</strong> 
-        </p>
-
         <div className="mb-12">
           <ContentCard title="Access to All Property Listings in the Philippines">
             <>
