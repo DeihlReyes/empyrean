@@ -135,7 +135,7 @@ Your Real Estate Journey, in one place.</p>
         </section>
 
         <p className="text-sm md:text-base text-center mb-8 max-w-4xl mx-auto">
-          One Real Estate System where properties, practitioners, and transactions live.
+          One Real Estate System where properties, practitioners, and transactions live.<br /><br />
         </p>
         
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
