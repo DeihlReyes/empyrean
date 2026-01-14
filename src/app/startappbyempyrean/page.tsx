@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
 import { ContentCard } from "@/components/content-card";
 import CustomSolutions from "@/components/custom-solutions";
 import Script from "next/script";
@@ -60,7 +63,6 @@ export default function BrokerAgentDeveloperPage() {
     });
   }, [screenshots]);
 
-  // Keyboard navigation: ESC closes, arrows navigate
   useEffect(() => {
     if (activeImage === null) return;
 
@@ -74,7 +76,6 @@ export default function BrokerAgentDeveloperPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeImage, goNext, goPrev]);
 
-  // Simple touch swipe on the modal
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
 
@@ -92,7 +93,6 @@ export default function BrokerAgentDeveloperPage() {
     const dx = endX - touchStartX;
     const dy = endY - touchStartY;
 
-    // horizontal swipe only
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
       if (dx > 0) goPrev();
       else goNext();
@@ -256,7 +256,9 @@ export default function BrokerAgentDeveloperPage() {
               <br />
               <br />
               You get to have access to all property listings in our database
-              integrated from multiple sources. No need to go to facebook, or post online (or you still may). Eitherway, the app will empower you further! Close deals faster.
+              integrated from multiple sources. No need to go to facebook, or
+              post online (or you still may). Eitherway, the app will empower
+              you further! Close deals faster.
               <br />
               <br />
               <strong>I am a Real Estate Practitioner. How can I sign up?</strong>
@@ -359,7 +361,6 @@ export default function BrokerAgentDeveloperPage() {
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
-            {/* Header / Controls */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <div className="text-xs text-gray-500">
                 SS{activeImage} / {screenshots.length}
@@ -393,7 +394,6 @@ export default function BrokerAgentDeveloperPage() {
               </div>
             </div>
 
-            {/* ✅ FIXED modal image sizing */}
             <div className="flex items-center justify-center bg-white py-4">
               <div className="relative w-[92vw] max-w-[420px] h-[72vh] sm:h-[78vh]">
                 <Image
@@ -413,22 +413,27 @@ export default function BrokerAgentDeveloperPage() {
               </div>
             </div>
 
-            {/* Footer hint */}
             <div className="px-4 py-3 border-t border-gray-100 text-center">
               <div className="text-xs text-gray-500">
                 Swipe left/right or use arrow keys to navigate
               </div>
             </div>
 
-               <div className="flex justify-center">
-          <Button
-            asChild
-            className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
-          >
-            <Link href="https://form.jotform.com/260127945833461">Join our Waiting List</Link>
-          </Button>
-        </div>
-            
+            {/* ✅ This was breaking build before (Button/Link not imported) */}
+            <div className="pb-6 flex justify-center">
+              <Button
+                asChild
+                className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
+              >
+                <a
+                  href="https://form.jotform.com/260127945833461"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Join our Waiting List
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       )}
