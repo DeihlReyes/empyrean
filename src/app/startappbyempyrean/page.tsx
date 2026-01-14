@@ -110,6 +110,10 @@ export default function BrokerAgentDeveloperPage() {
           Start App by Empyrean
         </h1>
 
+        <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
+          Simpler way of exploring the market. <br /> The Philippine Real Estate, in your phone.
+        </p>
+
         {/* Branding Section */}
         <section className="mb-4">
           <div className="flex justify-center mt-2">
