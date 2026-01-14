@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-
 import { ContentCard } from "@/components/content-card";
 import CustomSolutions from "@/components/custom-solutions";
 import Script from "next/script";
 import ScrollScaleIcon from "@/components/ScrollScaleIcon";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
+// ✅ Icons for Feature Board
 import {
   Database,
   Store,
@@ -61,6 +61,7 @@ export default function BrokerAgentDeveloperPage() {
     });
   }, [screenshots]);
 
+  // Keyboard navigation: ESC closes, arrows navigate
   useEffect(() => {
     if (activeImage === null) return;
 
@@ -74,6 +75,7 @@ export default function BrokerAgentDeveloperPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeImage, goNext, goPrev]);
 
+  // Simple touch swipe on the modal
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
 
@@ -91,6 +93,7 @@ export default function BrokerAgentDeveloperPage() {
     const dx = endX - touchStartX;
     const dy = endY - touchStartY;
 
+    // horizontal swipe only
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
       if (dx > 0) goPrev();
       else goNext();
@@ -128,9 +131,25 @@ export default function BrokerAgentDeveloperPage() {
           </div>
         </section>
 
-        <p className="text-sm md:text-base text-center mb-14 max-w-4xl mx-auto">
+        <p className="text-sm md:text-base text-center mb-8 max-w-4xl mx-auto">
           You Access Us, You Access Everyone.
         </p>
+
+        {/* ✅ FIX B: Button ALWAYS visible on the page */}
+        <div className="flex justify-center mb-14">
+          <Button
+            asChild
+            className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
+          >
+            <a
+              href="https://form.jotform.com/260127945833461"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Join our Waiting List
+            </a>
+          </Button>
+        </div>
 
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
           The First Philippine Real Estate SuperApp
@@ -359,6 +378,7 @@ export default function BrokerAgentDeveloperPage() {
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
+            {/* Header / Controls */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <div className="text-xs text-gray-500">
                 SS{activeImage} / {screenshots.length}
@@ -392,6 +412,7 @@ export default function BrokerAgentDeveloperPage() {
               </div>
             </div>
 
+            {/* Modal image sizing */}
             <div className="flex items-center justify-center bg-white py-4">
               <div className="relative w-[92vw] max-w-[420px] h-[72vh] sm:h-[78vh]">
                 <Image
@@ -411,26 +432,11 @@ export default function BrokerAgentDeveloperPage() {
               </div>
             </div>
 
+            {/* Footer hint */}
             <div className="px-4 py-3 border-t border-gray-100 text-center">
               <div className="text-xs text-gray-500">
                 Swipe left/right or use arrow keys to navigate
               </div>
-            </div>
-
-            {/* ✅ This was breaking build before (Button/Link not imported) */}
-            <div className="pb-6 flex justify-center">
-              <Button
-                asChild
-                className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
-              >
-                <a
-                  href="https://form.jotform.com/260127945833461"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Join our Waiting List
-                </a>
-              </Button>
             </div>
           </div>
         </div>
