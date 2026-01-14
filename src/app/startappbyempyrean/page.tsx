@@ -142,9 +142,9 @@ export default function BrokerAgentDeveloperPage() {
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
           Every Property Listings.
           <br />
-          An additional Operating System. 
+          An additional Operating System for Practitioners. 
           <br />
-          The Official Marketplace. 
+          The Official Marketplace for Clients. 
           <br /><br /><strong>One Central Platform.</strong>
         </p>
 
