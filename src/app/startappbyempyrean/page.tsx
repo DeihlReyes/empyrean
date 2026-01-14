@@ -134,23 +134,7 @@ export default function BrokerAgentDeveloperPage() {
         <p className="text-sm md:text-base text-center mb-8 max-w-4xl mx-auto">
           You Access Us, You Access Everyone.
         </p>
-
-        {/* ✅ FIX B: Button ALWAYS visible on the page */}
-        <div className="flex justify-center mb-14">
-          <Button
-            asChild
-            className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
-          >
-            <a
-              href="https://form.jotform.com/260127945833461"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Join our Waiting List
-            </a>
-          </Button>
-        </div>
-
+        
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
           The First Philippine Real Estate SuperApp
         </h2>
@@ -357,6 +341,22 @@ export default function BrokerAgentDeveloperPage() {
             </p>
           </div>
         </section>
+
+        {/* ✅ FIX B: Button ALWAYS visible on the page */}
+        <div className="flex justify-center mb-14">
+          <Button
+            asChild
+            className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
+          >
+            <a
+              href="https://form.jotform.com/260127945833461"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Join our Waiting List
+            </a>
+          </Button>
+        </div>
 
         <div className="mt-12">
           <CustomSolutions />
