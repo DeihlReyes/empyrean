@@ -111,7 +111,7 @@ export default function BrokerAgentDeveloperPage() {
         </h1>
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-A Unified System where properties, practitioners, and transactions live</p>
+Your Real Estate Journey, in one place.</p>
 
         {/* Branding Section */}
         <section className="mb-4">
@@ -135,7 +135,7 @@ A Unified System where properties, practitioners, and transactions live</p>
         </section>
 
         <p className="text-sm md:text-base text-center mb-8 max-w-4xl mx-auto">
-          You Access Us, You Access Everyone.
+          One Real Estate System where properties, practitioners, and transactions live.
         </p>
         
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
