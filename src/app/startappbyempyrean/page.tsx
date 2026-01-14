@@ -111,7 +111,7 @@ export default function BrokerAgentDeveloperPage() {
         </h1>
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
-          Simpler way of exploring the market. <br /> The Philippine Real Estate, in your phone.
+          Simpler way of exploring the market.
         </p>
 
         {/* Branding Section */}
@@ -140,16 +140,15 @@ export default function BrokerAgentDeveloperPage() {
         </p>
         
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
-          The First Philippine Real Estate SuperApp
+          The Philippine Real Estate in your pocket.
         </h2>
 
         <p className="text-sm md:text-base text-center mb-6 max-w-4xl mx-auto">
           Every Property Listings.
           <br />
-          An additional Operating System for Practitioners. 
-          <br />
-          The Official Marketplace for Clients. 
-          <br /><br /><strong>One Central Platform.</strong>
+          Verified Practitioners. 
+          <br /><br />
+          <strong>One Central Platform.</strong> 
         </p>
 
         <div className="mb-12">
