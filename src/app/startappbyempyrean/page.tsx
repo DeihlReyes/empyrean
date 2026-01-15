@@ -62,10 +62,9 @@ const FEATURE_GROUPS: FeatureGroup[] = [
       { label: "In-App Smooth Messaging", icon: MessageCircle },
       { label: "Secured & Verified Transactions", icon: ShieldCheck },
       { label: "Faster Reporting & Accountability", icon: MessageSquareWarning },
-      { label: "Review Agents", icon: UserCheck },
 
-
-      // 🔜 Coming Soon (moved here)
+      // 🔜 Coming Soon
+      { label: "Review Agents", icon: UserCheck, comingSoon: true },
       { label: "Pay through Credit Card", icon: CreditCard, comingSoon: true },
     ],
   },
@@ -73,14 +72,17 @@ const FEATURE_GROUPS: FeatureGroup[] = [
     title: "Live",
     items: [
       { label: "Manage Current Lease", icon: FileSignature },
-      { label: "Access to other Professional Services", icon: BookUser },
-      { label: "Review Landlords", icon: Home },
-      { label: "Review Property", icon: Star },
       { label: "24/7 Customer Service", icon: Headphones },
 
       // 🔜 Coming Soon
+      {
+        label: "Access to other Professional Services",
+        icon: BookUser,
+        comingSoon: true,
+      },
+      { label: "Review Landlords", icon: Home, comingSoon: true },
+      { label: "Review Property", icon: Star, comingSoon: true },
       { label: "Lease Administration", icon: ClipboardList, comingSoon: true },
-
     ],
   },
 ];
@@ -231,7 +233,6 @@ export default function BrokerAgentDeveloperPage() {
                 Feature Board
               </div>
 
-              {/* 🔼 increased font size for “features” */}
               <div className="text-sm md:text-base font-semibold text-gray-600">
                 {totalFeatures} features
               </div>
