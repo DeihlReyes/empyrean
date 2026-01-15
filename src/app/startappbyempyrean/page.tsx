@@ -27,6 +27,8 @@ import {
   Home,
   CreditCard,
   ClipboardList,
+  BadgeCheck,
+  Compass,
 } from "lucide-react";
 
 type FeatureItem = {
@@ -57,9 +59,14 @@ const FEATURE_GROUPS: FeatureGroup[] = [
   {
     title: "Transact",
     items: [
+      { label: "Wide-variety of Verified Agents", icon: BadgeCheck },
+      { label: "Explore Agents", icon: Compass },
       { label: "In-App Smooth Messaging", icon: MessageCircle },
       { label: "Secured & Verified Transactions", icon: ShieldCheck },
       { label: "Faster Reporting & Accountability", icon: MessageSquareWarning },
+
+      // 🔜 Coming Soon (moved here)
+      { label: "Pay through Credit Card", icon: CreditCard, comingSoon: true },
     ],
   },
   {
@@ -73,7 +80,6 @@ const FEATURE_GROUPS: FeatureGroup[] = [
 
       // 🔜 Coming Soon
       { label: "Lease Administration", icon: ClipboardList, comingSoon: true },
-      { label: "Pay through Credit Card", icon: CreditCard, comingSoon: true },
 
       { label: "24/7 Customer Service", icon: Headphones },
     ],
@@ -222,10 +228,12 @@ export default function BrokerAgentDeveloperPage() {
         <section className="mb-12" aria-label="Start App Features">
           <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
             <div className="flex items-center justify-between gap-4 mb-6">
-              <div className="text-sm font-semibold text-gray-900">
+              <div className="text-base md:text-lg font-bold text-gray-900">
                 Feature Board
               </div>
-              <div className="text-xs text-gray-500">
+
+              {/* 🔼 increased font size for “features” */}
+              <div className="text-sm md:text-base font-semibold text-gray-600">
                 {totalFeatures} features
               </div>
             </div>
