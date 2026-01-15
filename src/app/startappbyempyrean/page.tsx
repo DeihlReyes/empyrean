@@ -305,7 +305,7 @@ export default function BrokerAgentDeveloperPage() {
         </section>
 
         <h2 className="text-2xl font-bold text-center mb-6">
-          Application Rough Snapshots
+          Application Rough Snapshots V1
         </h2>
 
         {/* Clickable Collage */}
