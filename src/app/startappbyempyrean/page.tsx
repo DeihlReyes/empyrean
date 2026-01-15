@@ -64,6 +64,8 @@ const FEATURE_GROUPS: FeatureGroup[] = [
       { label: "In-App Smooth Messaging", icon: MessageCircle },
       { label: "Secured & Verified Transactions", icon: ShieldCheck },
       { label: "Faster Reporting & Accountability", icon: MessageSquareWarning },
+      { label: "Review Agents", icon: UserCheck },
+
 
       // 🔜 Coming Soon (moved here)
       { label: "Pay through Credit Card", icon: CreditCard, comingSoon: true },
@@ -73,15 +75,14 @@ const FEATURE_GROUPS: FeatureGroup[] = [
     title: "Live",
     items: [
       { label: "Manage Current Lease", icon: FileSignature },
-      { label: "Access to Value Added Services", icon: Sparkles },
-      { label: "Review Brokers and Agents", icon: UserCheck },
+      { label: "Access to other Professional Services", icon: Sparkles },
       { label: "Review Landlords", icon: Home },
       { label: "Review Property", icon: Star },
+      { label: "24/7 Customer Service", icon: Headphones },
 
       // 🔜 Coming Soon
       { label: "Lease Administration", icon: ClipboardList, comingSoon: true },
 
-      { label: "24/7 Customer Service", icon: Headphones },
     ],
   },
 ];
