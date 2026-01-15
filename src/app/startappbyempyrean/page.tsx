@@ -21,7 +21,7 @@ import {
   UserCog,
   History,
   FileSignature,
-  Sparkles,
+  BookUser,
   Star,
   UserCheck,
   Home,
@@ -59,8 +59,7 @@ const FEATURE_GROUPS: FeatureGroup[] = [
   {
     title: "Transact",
     items: [
-      { label: "Wide-variety of Verified Agents", icon: BadgeCheck },
-      { label: "Explore Agents", icon: Compass },
+      { label: "Explore Verified Agents", icon: Compass },
       { label: "In-App Smooth Messaging", icon: MessageCircle },
       { label: "Secured & Verified Transactions", icon: ShieldCheck },
       { label: "Faster Reporting & Accountability", icon: MessageSquareWarning },
@@ -75,7 +74,7 @@ const FEATURE_GROUPS: FeatureGroup[] = [
     title: "Live",
     items: [
       { label: "Manage Current Lease", icon: FileSignature },
-      { label: "Access to other Professional Services", icon: Sparkles },
+      { label: "Access to other Professional Services", icon: BookUser },
       { label: "Review Landlords", icon: Home },
       { label: "Review Property", icon: Star },
       { label: "24/7 Customer Service", icon: Headphones },
