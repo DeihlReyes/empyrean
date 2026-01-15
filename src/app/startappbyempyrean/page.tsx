@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ContentCard } from "@/components/content-card";
-import CustomSolutions from "@/components/custom-solutions";
 import Script from "next/script";
 import ScrollScaleIcon from "@/components/ScrollScaleIcon";
 import Image from "next/image";
