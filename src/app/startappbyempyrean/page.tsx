@@ -75,6 +75,7 @@ const FEATURE_GROUPS: FeatureGroup[] = [
       { label: "24/7 Customer Service", icon: Headphones },
 
       // 🔜 Coming Soon
+      { label: "Lease Administration", icon: ClipboardList, comingSoon: true },
       {
         label: "Access to other Professional Services",
         icon: BookUser,
@@ -82,7 +83,6 @@ const FEATURE_GROUPS: FeatureGroup[] = [
       },
       { label: "Review Landlords", icon: Home, comingSoon: true },
       { label: "Review Property", icon: Star, comingSoon: true },
-      { label: "Lease Administration", icon: ClipboardList, comingSoon: true },
     ],
   },
 ];
