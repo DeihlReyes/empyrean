@@ -27,7 +27,7 @@ import {
   Home,
   CreditCard,
   ClipboardList,
-  Compass,
+  BadgeCheck,
 } from "lucide-react";
 
 type FeatureItem = {
@@ -58,9 +58,9 @@ const FEATURE_GROUPS: FeatureGroup[] = [
   {
     title: "Transact",
     items: [
-      { label: "Explore Verified Agents", icon: Compass },
       { label: "In-App Smooth Messaging", icon: MessageCircle },
-      { label: "Secured & Verified Transactions", icon: ShieldCheck },
+      { label: "Verified Agents", icon: BadgeCheck },
+      { label: "Secured Transactions", icon: ShieldCheck },
       { label: "Faster Reporting & Accountability", icon: MessageSquareWarning },
 
       // 🔜 Coming Soon
