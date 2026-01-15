@@ -27,7 +27,6 @@ import {
   Home,
   CreditCard,
   ClipboardList,
-  BadgeCheck,
   Compass,
 } from "lucide-react";
 
