@@ -565,7 +565,13 @@ export default function PublicListingsTable() {
                   <td className="px-3 py-2 border-b">{r.parking ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.availability ?? ""}</td>
                   <td className="px-3 py-2 border-b">
-                    {r.updated_at ? new Date(r.updated_at).toLocaleString() : ""}
+{r.updated_at
+  ? new Date(r.updated_at).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
+  : ""}
                   </td>
                 </tr>
               ))
