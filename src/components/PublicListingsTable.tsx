@@ -415,32 +415,38 @@ export default function PublicListingsTable() {
             {/* Header row (sticky) */}
             <tr className={`bg-gray-50 sticky ${headTop} z-20`}>
               {[
-                ["code", "Code"],
-                ["caption", "Caption"],
-                ["category", "Category"],
-                ["city", "City"],
-                ["property_type", "Type"],
-                ["furnishing", "Furnishing"],
-                ["bedrooms", "BR"],
-                ["with_balcony", "Balcony"],
-                ["pet_friendly", "Pet"],
-                ["property_name", "Property Name"],
-                ["floor_number", "Floor"],
-                ["unit_number", "Unit"],
-                ["area_sqm", "sqm"],
-                ["leasing_price", "Lease"],
-                ["selling_price", "Sale"],
-                ["parking", "Parking"],
-                ["availability", "Availability"],
-                ["updated_at", "Updated"],
-              ].map(([key, label]) => (
-              <th
-  className="text-left px-3 py-2 border-b cursor-pointer select-none whitespace-pre-line min-w-[420px]"
-  onClick={() => toggleSort("caption")}
->
-  Caption <span className="text-gray-400">{sortIndicator("caption")}</span>
-</th>
-              ))}
+  ["code", "Code"],
+  ["caption", "Caption"],
+  ["category", "Category"],
+  ["city", "City"],
+  ["property_type", "Type"],
+  ["furnishing", "Furnishing"],
+  ["bedrooms", "BR"],
+  ["with_balcony", "Balcony"],
+  ["pet_friendly", "Pet"],
+  ["property_name", "Property Name"],
+  ["floor_number", "Floor"],
+  ["unit_number", "Unit"],
+  ["area_sqm", "sqm"],
+  ["leasing_price", "Lease"],
+  ["selling_price", "Sale"],
+  ["parking", "Parking"],
+  ["availability", "Availability"],
+  ["updated_at", "Updated"],
+].map(([key, label]) => (
+  <th
+    key={key}
+    className={`text-left px-3 py-2 border-b cursor-pointer select-none
+      ${key === "caption" ? "whitespace-pre-line min-w-[420px]" : "whitespace-nowrap"}
+    `}
+    onClick={() => toggleSort(key as SortKey)}
+  >
+    {label}{" "}
+    <span className="text-gray-400">
+      {sortIndicator(key as SortKey)}
+    </span>
+  </th>
+))}
             </tr>
 
             {/* Filter row (sticky) */}
