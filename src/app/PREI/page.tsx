@@ -27,7 +27,7 @@ export default function PropertyOwnerPage() {
         </p>
 
         {/* ✅ PREI Table (Supabase-powered) */}
-        <div className="w-full mb-12">
+        <div className="w-full mb-10">
           <PREITable />
         </div>
 
