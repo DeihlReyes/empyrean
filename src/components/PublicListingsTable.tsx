@@ -434,14 +434,12 @@ export default function PublicListingsTable() {
                 ["availability", "Availability"],
                 ["updated_at", "Updated"],
               ].map(([key, label]) => (
-                <th
-                  key={key}
-                  className="text-left px-3 py-2 border-b cursor-pointer select-none whitespace-nowrap"
-                  onClick={() => toggleSort(key as SortKey)}
-                  title="Click to sort"
-                >
-                  {label} <span className="text-gray-400">{sortIndicator(key as SortKey)}</span>
-                </th>
+              <th
+  className="text-left px-3 py-2 border-b cursor-pointer select-none whitespace-pre-line min-w-[420px]"
+  onClick={() => toggleSort("caption")}
+>
+  Caption <span className="text-gray-400">{sortIndicator("caption")}</span>
+</th>
               ))}
             </tr>
 
@@ -548,8 +546,9 @@ export default function PublicListingsTable() {
               sorted.map((r) => (
                 <tr key={r.id} className="hover:bg-gray-50">
                   <td className="px-3 py-2 border-b">{r.code ?? ""}</td>
-                  <td className="px-3 py-2 border-b">{r.caption ?? ""}</td>
-                  <td className="px-3 py-2 border-b">{r.category ?? ""}</td>
+<td className="px-3 py-2 border-b whitespace-pre-line min-w-[420px]">
+  {r.caption ?? ""}
+</td>                  <td className="px-3 py-2 border-b">{r.category ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.city ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.property_type ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.furnishing ?? ""}</td>
