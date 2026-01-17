@@ -1,15 +1,14 @@
 import { ContentCard } from "@/components/content-card";
 import CustomSolutions from "@/components/custom-solutions";
 import { Metadata } from "next";
+import PREITable from "@/components/PREITable";
 
 export const metadata: Metadata = {
   title: "Philippine Real Estate Inventory | Empyrean Real Estate Solutions",
-  description:
-    "View all Property Listings in the Philippine Real Estate Market",
+  description: "View all Property Listings in the Philippine Real Estate Market",
   openGraph: {
     title: "Philippine Real Estate Inventory | Empyrean Real Estate Solutions",
-    description:
-      "View all Property Listings in the Philippine Real Estate Market.",
+    description: "View all Property Listings in the Philippine Real Estate Market.",
     type: "website",
   },
 };
@@ -27,27 +26,19 @@ export default function PropertyOwnerPage() {
           Estate Brokers and Agents.
         </p>
 
-        {/* 📊 Google Sheet Embed (Published HTML) */}
-        <div className="w-full border rounded-lg overflow-hidden mb-12">
-          <iframe
-            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSXQFzVVCGUh4KqsGJdes7gaVbOIWAotaOabTXOxLcE3D7rnitcxFbZ3fQlyjpV1WGZyqWAjcUmYthN/pubhtml?widget=true&amp;headers=false"
-            className="w-full h-[780px]"
-            frameBorder="0"
-            style={{
-              display: "block",
-              zoom: 0.7, // shrink sheet including font for better readability
-            }}
-          />
+        {/* ✅ PREI Table (Supabase-powered) */}
+        <div className="w-full mb-12">
+          <PREITable />
         </div>
 
         {/* Check Availability / Schedule Viewing CTA */}
-        <div
-          className="mb-12"
-          aria-label="Check Availability and Schedule a Viewing"
-        >
+        <div className="mb-12" aria-label="Check Availability and Schedule a Viewing">
           <ContentCard title="Check Availability and Schedule a Viewing">
             <>
-              Please take note of the listing code and join our dedicated channel to check on a property&apos;s availability and schedule a viewing. You may also join us as an Official Sales Partner (firms, freelancers, and agents) <strong>for higher commission share!</strong> Contact us for partnership.
+              Please take note of the listing code and join our dedicated channel to
+              check on a property&apos;s availability and schedule a viewing. You may
+              also join us as an Official Sales Partner (firms, freelancers, and agents){" "}
+              <strong>for higher commission share!</strong> Contact us for partnership.
               <div className="flex flex-wrap justify-start gap-4 mt-4">
                 <a
                   href="https://chat.whatsapp.com/C7Pr6gAcFxeH9dM0f6f8lO"
@@ -71,9 +62,10 @@ export default function PropertyOwnerPage() {
 
         {/* Smaller “continuously improving” paragraph */}
         <p className="text-[12px] sm:text-[14px] md:text-sm text-center mb-16 max-w-4xl mx-auto">
-          We are continuously improving, expanding, and completing this inventory for all our partners. We appreciate your continued business partnership with us.
+          We are continuously improving, expanding, and completing this inventory for
+          all our partners. We appreciate your continued business partnership with us.
         </p>
-        
+
         {/* Custom Solutions Section */}
         <div className="mt-12">
           <CustomSolutions />
