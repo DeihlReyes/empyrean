@@ -570,8 +570,26 @@ async function copyText(text: string) {
                 <tr key={r.id} className="hover:bg-gray-50">
                   <td className="px-3 py-2 border-b">{r.code ?? ""}</td>
 <td className="px-3 py-2 border-b whitespace-pre-line min-w-[420px]">
-  {r.caption ?? ""}
-</td>                  <td className="px-3 py-2 border-b">{r.category ?? ""}</td>
+  <div className="flex items-start gap-2">
+    <button
+      type="button"
+      className="shrink-0 border rounded px-2 py-1 text-xs hover:bg-gray-100"
+      onClick={async () => {
+        const ok = await copyText(r.caption ?? "");
+        if (ok) {
+          setCopiedId(r.id);
+          window.setTimeout(() => setCopiedId(null), 1200);
+        }
+      }}
+      title="Copy caption"
+    >
+      {copiedId === r.id ? "Copied" : "Copy"}
+    </button>
+
+    <div className="select-text">{r.caption ?? ""}</div>
+  </div>
+</td>
+                 <td className="px-3 py-2 border-b">{r.category ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.city ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.property_type ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.furnishing ?? ""}</td>
