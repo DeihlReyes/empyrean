@@ -28,6 +28,28 @@ type Listing = {
 
 type BoolFilter = "" | "true" | "false";
 
+type SortKey =
+  | "code"
+  | "caption"
+  | "category"
+  | "city"
+  | "property_type"
+  | "furnishing"
+  | "bedrooms"
+  | "with_balcony"
+  | "pet_friendly"
+  | "property_name"
+  | "floor_number"
+  | "unit_number"
+  | "area_sqm"
+  | "leasing_price"
+  | "selling_price"
+  | "parking"
+  | "availability"
+  | "updated_at";
+
+type SortDir = "asc" | "desc";
+
 function toLowerSafe(v: string | null | undefined) {
   return (v ?? "").toLowerCase();
 }
@@ -49,12 +71,38 @@ function fmtBool(v: boolean | null) {
   return v ? "Yes" : "No";
 }
 
+function cmpNullableString(a: string | null, b: string | null) {
+  const aa = (a ?? "").toLowerCase();
+  const bb = (b ?? "").toLowerCase();
+  if (aa < bb) return -1;
+  if (aa > bb) return 1;
+  return 0;
+}
+
+function cmpNullableNumber(a: number | null, b: number | null) {
+  const aa = a ?? Number.NEGATIVE_INFINITY;
+  const bb = b ?? Number.NEGATIVE_INFINITY;
+  return aa - bb;
+}
+
+function cmpNullableBool(a: boolean | null, b: boolean | null) {
+  const aa = a === null ? -1 : a ? 1 : 0;
+  const bb = b === null ? -1 : b ? 1 : 0;
+  return aa - bb;
+}
+
+function cmpDateIso(a: string, b: string) {
+  const aa = new Date(a).getTime();
+  const bb = new Date(b).getTime();
+  return aa - bb;
+}
+
 export default function PublicListingsTable() {
   const [rows, setRows] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  // Optional global search (kept)
+  // Optional global search
   const [globalQ, setGlobalQ] = useState("");
 
   // Per-column filters
@@ -81,6 +129,10 @@ export default function PublicListingsTable() {
   const [leaseMax, setLeaseMax] = useState("");
   const [saleMin, setSaleMin] = useState("");
   const [saleMax, setSaleMax] = useState("");
+
+  // Sorting
+  const [sortKey, setSortKey] = useState<SortKey>("updated_at");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
 
   useEffect(() => {
     (async () => {
@@ -180,15 +232,12 @@ export default function PublicListingsTable() {
       if (nLeaseMax !== null && (r.leasing_price ?? Infinity) > nLeaseMax)
         return false;
 
-      if (
-        nSaleMin !== null &&
-        (r.selling_price ?? -Infinity) < nSaleMin
-      )
+      if (nSaleMin !== null && (r.selling_price ?? -Infinity) < nSaleMin)
         return false;
       if (nSaleMax !== null && (r.selling_price ?? Infinity) > nSaleMax)
         return false;
 
-      // Optional global search (across common fields)
+      // Optional global search
       if (g) {
         const hay = [
           r.code,
@@ -238,6 +287,69 @@ export default function PublicListingsTable() {
     saleMax,
   ]);
 
+  const sorted = useMemo(() => {
+    const dir = sortDir === "asc" ? 1 : -1;
+
+    const getCmp = (a: Listing, b: Listing) => {
+      switch (sortKey) {
+        case "code":
+          return cmpNullableString(a.code, b.code);
+        case "caption":
+          return cmpNullableString(a.caption, b.caption);
+        case "category":
+          return cmpNullableString(a.category, b.category);
+        case "city":
+          return cmpNullableString(a.city, b.city);
+        case "property_type":
+          return cmpNullableString(a.property_type, b.property_type);
+        case "furnishing":
+          return cmpNullableString(a.furnishing, b.furnishing);
+        case "bedrooms":
+          return cmpNullableString(a.bedrooms, b.bedrooms);
+        case "with_balcony":
+          return cmpNullableBool(a.with_balcony, b.with_balcony);
+        case "pet_friendly":
+          return cmpNullableBool(a.pet_friendly, b.pet_friendly);
+        case "property_name":
+          return cmpNullableString(a.property_name, b.property_name);
+        case "floor_number":
+          return cmpNullableString(a.floor_number, b.floor_number);
+        case "unit_number":
+          return cmpNullableString(a.unit_number, b.unit_number);
+        case "area_sqm":
+          return cmpNullableNumber(a.area_sqm, b.area_sqm);
+        case "leasing_price":
+          return cmpNullableNumber(a.leasing_price, b.leasing_price);
+        case "selling_price":
+          return cmpNullableNumber(a.selling_price, b.selling_price);
+        case "parking":
+          return cmpNullableString(a.parking, b.parking);
+        case "availability":
+          return cmpNullableString(a.availability, b.availability);
+        case "updated_at":
+          return cmpDateIso(a.updated_at, b.updated_at);
+        default:
+          return 0;
+      }
+    };
+
+    return [...filtered].sort((a, b) => dir * getCmp(a, b));
+  }, [filtered, sortKey, sortDir]);
+
+  function toggleSort(k: SortKey) {
+    if (sortKey === k) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(k);
+      setSortDir("asc");
+    }
+  }
+
+  function sortIndicator(k: SortKey) {
+    if (sortKey !== k) return "↕";
+    return sortDir === "asc" ? "↑" : "↓";
+  }
+
   function resetAll() {
     setGlobalQ("");
     setCodeQ("");
@@ -263,10 +375,17 @@ export default function PublicListingsTable() {
     setLeaseMax("");
     setSaleMin("");
     setSaleMax("");
+
+    setSortKey("updated_at");
+    setSortDir("desc");
   }
 
   if (loading) return <div className="p-6">Loading…</div>;
   if (err) return <div className="p-6 text-red-600">Error: {err}</div>;
+
+  // Sticky header layout: header row height ~42px; filter row below it ~48px
+  const headTop = "top-0";
+  const filterTop = "top-[42px]";
 
   return (
     <div className="border border-gray-300 rounded-lg overflow-hidden bg-white">
@@ -285,238 +404,133 @@ export default function PublicListingsTable() {
           Reset
         </button>
         <div className="text-sm text-gray-600 md:ml-auto">
-          Showing <strong>{filtered.length}</strong> of{" "}
+          Showing <strong>{sorted.length}</strong> of{" "}
           <strong>{rows.length}</strong>
         </div>
       </div>
 
-      <div className="overflow-auto">
+      <div className="overflow-auto max-h-[70vh]">
         <table className="min-w-[1700px] w-full text-sm">
-          <thead className="bg-gray-50">
-            {/* Header row */}
-            <tr>
-              <th className="text-left px-3 py-2 border-b">Code</th>
-              <th className="text-left px-3 py-2 border-b">Caption</th>
-              <th className="text-left px-3 py-2 border-b">Category</th>
-              <th className="text-left px-3 py-2 border-b">City</th>
-              <th className="text-left px-3 py-2 border-b">Type</th>
-              <th className="text-left px-3 py-2 border-b">Furnishing</th>
-              <th className="text-left px-3 py-2 border-b">BR</th>
-              <th className="text-left px-3 py-2 border-b">Balcony</th>
-              <th className="text-left px-3 py-2 border-b">Pet</th>
-              <th className="text-left px-3 py-2 border-b">Property Name</th>
-              <th className="text-left px-3 py-2 border-b">Floor</th>
-              <th className="text-left px-3 py-2 border-b">Unit</th>
-              <th className="text-left px-3 py-2 border-b">sqm (min/max)</th>
-              <th className="text-left px-3 py-2 border-b">Lease (min/max)</th>
-              <th className="text-left px-3 py-2 border-b">Sale (min/max)</th>
-              <th className="text-left px-3 py-2 border-b">Parking</th>
-              <th className="text-left px-3 py-2 border-b">Availability</th>
-              <th className="text-left px-3 py-2 border-b">Updated</th>
+          <thead>
+            {/* Header row (sticky) */}
+            <tr className={`bg-gray-50 sticky ${headTop} z-20`}>
+              {[
+                ["code", "Code"],
+                ["caption", "Caption"],
+                ["category", "Category"],
+                ["city", "City"],
+                ["property_type", "Type"],
+                ["furnishing", "Furnishing"],
+                ["bedrooms", "BR"],
+                ["with_balcony", "Balcony"],
+                ["pet_friendly", "Pet"],
+                ["property_name", "Property Name"],
+                ["floor_number", "Floor"],
+                ["unit_number", "Unit"],
+                ["area_sqm", "sqm"],
+                ["leasing_price", "Lease"],
+                ["selling_price", "Sale"],
+                ["parking", "Parking"],
+                ["availability", "Availability"],
+                ["updated_at", "Updated"],
+              ].map(([key, label]) => (
+                <th
+                  key={key}
+                  className="text-left px-3 py-2 border-b cursor-pointer select-none whitespace-nowrap"
+                  onClick={() => toggleSort(key as SortKey)}
+                  title="Click to sort"
+                >
+                  {label} <span className="text-gray-400">{sortIndicator(key as SortKey)}</span>
+                </th>
+              ))}
             </tr>
 
-            {/* Filter row (per column) */}
-            <tr className="bg-white">
+            {/* Filter row (sticky) */}
+            <tr className={`bg-white sticky ${filterTop} z-10`}>
               <th className="px-2 py-2 border-b">
-                <input
-                  className="border rounded px-2 py-1 w-full"
-                  placeholder="Search…"
-                  value={codeQ}
-                  onChange={(e) => setCodeQ(e.target.value)}
-                />
+                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={codeQ} onChange={(e) => setCodeQ(e.target.value)} />
               </th>
               <th className="px-2 py-2 border-b">
-                <input
-                  className="border rounded px-2 py-1 w-full"
-                  placeholder="Search…"
-                  value={captionQ}
-                  onChange={(e) => setCaptionQ(e.target.value)}
-                />
+                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={captionQ} onChange={(e) => setCaptionQ(e.target.value)} />
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={category} onChange={(e) => setCategory(e.target.value)}>
                   <option value="">All</option>
-                  {options.categories.map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
+                  {options.categories.map((v) => (<option key={v} value={v}>{v}</option>))}
                 </select>
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={city} onChange={(e) => setCity(e.target.value)}>
                   <option value="">All</option>
-                  {options.cities.map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
+                  {options.cities.map((v) => (<option key={v} value={v}>{v}</option>))}
                 </select>
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={type} onChange={(e) => setType(e.target.value)}>
                   <option value="">All</option>
-                  {options.types.map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
+                  {options.types.map((v) => (<option key={v} value={v}>{v}</option>))}
                 </select>
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={furnishing}
-                  onChange={(e) => setFurnishing(e.target.value)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={furnishing} onChange={(e) => setFurnishing(e.target.value)}>
                   <option value="">All</option>
-                  {options.furnishings.map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
+                  {options.furnishings.map((v) => (<option key={v} value={v}>{v}</option>))}
                 </select>
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={bedrooms}
-                  onChange={(e) => setBedrooms(e.target.value)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={bedrooms} onChange={(e) => setBedrooms(e.target.value)}>
                   <option value="">All</option>
-                  {options.bedrooms.map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
+                  {options.bedrooms.map((v) => (<option key={v} value={v}>{v}</option>))}
                 </select>
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={balcony}
-                  onChange={(e) => setBalcony(e.target.value as BoolFilter)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={balcony} onChange={(e) => setBalcony(e.target.value as BoolFilter)}>
                   <option value="">Any</option>
                   <option value="true">Yes</option>
                   <option value="false">No</option>
                 </select>
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={pet}
-                  onChange={(e) => setPet(e.target.value as BoolFilter)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={pet} onChange={(e) => setPet(e.target.value as BoolFilter)}>
                   <option value="">Any</option>
                   <option value="true">Yes</option>
                   <option value="false">No</option>
                 </select>
               </th>
               <th className="px-2 py-2 border-b">
-                <input
-                  className="border rounded px-2 py-1 w-full"
-                  placeholder="Search…"
-                  value={propertyNameQ}
-                  onChange={(e) => setPropertyNameQ(e.target.value)}
-                />
+                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={propertyNameQ} onChange={(e) => setPropertyNameQ(e.target.value)} />
               </th>
               <th className="px-2 py-2 border-b">
-                <input
-                  className="border rounded px-2 py-1 w-full"
-                  placeholder="Search…"
-                  value={floorQ}
-                  onChange={(e) => setFloorQ(e.target.value)}
-                />
+                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={floorQ} onChange={(e) => setFloorQ(e.target.value)} />
               </th>
               <th className="px-2 py-2 border-b">
-                <input
-                  className="border rounded px-2 py-1 w-full"
-                  placeholder="Search…"
-                  value={unitQ}
-                  onChange={(e) => setUnitQ(e.target.value)}
-                />
+                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={unitQ} onChange={(e) => setUnitQ(e.target.value)} />
               </th>
               <th className="px-2 py-2 border-b">
                 <div className="flex gap-2">
-                  <input
-                    className="border rounded px-2 py-1 w-full"
-                    placeholder="Min"
-                    value={sqmMin}
-                    onChange={(e) => setSqmMin(e.target.value)}
-                  />
-                  <input
-                    className="border rounded px-2 py-1 w-full"
-                    placeholder="Max"
-                    value={sqmMax}
-                    onChange={(e) => setSqmMax(e.target.value)}
-                  />
+                  <input className="border rounded px-2 py-1 w-full" placeholder="Min" value={sqmMin} onChange={(e) => setSqmMin(e.target.value)} />
+                  <input className="border rounded px-2 py-1 w-full" placeholder="Max" value={sqmMax} onChange={(e) => setSqmMax(e.target.value)} />
                 </div>
               </th>
               <th className="px-2 py-2 border-b">
                 <div className="flex gap-2">
-                  <input
-                    className="border rounded px-2 py-1 w-full"
-                    placeholder="Min"
-                    value={leaseMin}
-                    onChange={(e) => setLeaseMin(e.target.value)}
-                  />
-                  <input
-                    className="border rounded px-2 py-1 w-full"
-                    placeholder="Max"
-                    value={leaseMax}
-                    onChange={(e) => setLeaseMax(e.target.value)}
-                  />
+                  <input className="border rounded px-2 py-1 w-full" placeholder="Min" value={leaseMin} onChange={(e) => setLeaseMin(e.target.value)} />
+                  <input className="border rounded px-2 py-1 w-full" placeholder="Max" value={leaseMax} onChange={(e) => setLeaseMax(e.target.value)} />
                 </div>
               </th>
               <th className="px-2 py-2 border-b">
                 <div className="flex gap-2">
-                  <input
-                    className="border rounded px-2 py-1 w-full"
-                    placeholder="Min"
-                    value={saleMin}
-                    onChange={(e) => setSaleMin(e.target.value)}
-                  />
-                  <input
-                    className="border rounded px-2 py-1 w-full"
-                    placeholder="Max"
-                    value={saleMax}
-                    onChange={(e) => setSaleMax(e.target.value)}
-                  />
+                  <input className="border rounded px-2 py-1 w-full" placeholder="Min" value={saleMin} onChange={(e) => setSaleMin(e.target.value)} />
+                  <input className="border rounded px-2 py-1 w-full" placeholder="Max" value={saleMax} onChange={(e) => setSaleMax(e.target.value)} />
                 </div>
               </th>
               <th className="px-2 py-2 border-b">
-                <input
-                  className="border rounded px-2 py-1 w-full"
-                  placeholder="Search…"
-                  value={parkingQ}
-                  onChange={(e) => setParkingQ(e.target.value)}
-                />
+                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={parkingQ} onChange={(e) => setParkingQ(e.target.value)} />
               </th>
               <th className="px-2 py-2 border-b">
-                <select
-                  className="border rounded px-2 py-1 w-full"
-                  value={availability}
-                  onChange={(e) => setAvailability(e.target.value)}
-                >
+                <select className="border rounded px-2 py-1 w-full" value={availability} onChange={(e) => setAvailability(e.target.value)}>
                   <option value="">All</option>
-                  {options.availability.map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
+                  {options.availability.map((v) => (<option key={v} value={v}>{v}</option>))}
                 </select>
               </th>
               <th className="px-2 py-2 border-b" />
@@ -524,14 +538,14 @@ export default function PublicListingsTable() {
           </thead>
 
           <tbody>
-            {filtered.length === 0 ? (
+            {sorted.length === 0 ? (
               <tr>
                 <td className="px-3 py-4 text-gray-600" colSpan={18}>
                   No listings match your filters.
                 </td>
               </tr>
             ) : (
-              filtered.map((r) => (
+              sorted.map((r) => (
                 <tr key={r.id} className="hover:bg-gray-50">
                   <td className="px-3 py-2 border-b">{r.code ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.caption ?? ""}</td>
