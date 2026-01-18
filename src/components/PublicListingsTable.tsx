@@ -50,9 +50,7 @@ type SortKey =
 
 type SortDir = "asc" | "desc";
 
-function toLowerSafe(v: string | null | undefined) {
-  return (v ?? "").toLowerCase();
-}
+const PAGE_LIMIT = 1000;
 
 function parseNumInput(s: string): number | null {
   const t = s.trim();
@@ -71,36 +69,23 @@ function fmtBool(v: boolean | null) {
   return v ? "Yes" : "No";
 }
 
-function cmpNullableString(a: string | null, b: string | null) {
-  const aa = (a ?? "").toLowerCase();
-  const bb = (b ?? "").toLowerCase();
-  if (aa < bb) return -1;
-  if (aa > bb) return 1;
-  return 0;
-}
-
-function cmpNullableNumber(a: number | null, b: number | null) {
-  const aa = a ?? Number.NEGATIVE_INFINITY;
-  const bb = b ?? Number.NEGATIVE_INFINITY;
-  return aa - bb;
-}
-
-function cmpNullableBool(a: boolean | null, b: boolean | null) {
-  const aa = a === null ? -1 : a ? 1 : 0;
-  const bb = b === null ? -1 : b ? 1 : 0;
-  return aa - bb;
-}
-
-function cmpDateIso(a: string, b: string) {
-  const aa = new Date(a).getTime();
-  const bb = new Date(b).getTime();
-  return aa - bb;
+// Small debounce so we don’t query on every keystroke instantly
+function useDebounced<T>(value: T, ms = 250) {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setV(value), ms);
+    return () => clearTimeout(t);
+  }, [value, ms]);
+  return v;
 }
 
 export default function PublicListingsTable() {
   const [rows, setRows] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
+
+  // total matches in DB for current filters (not just the 1000 we render)
+  const [totalMatches, setTotalMatches] = useState<number>(0);
 
   // Optional global search
   const [globalQ, setGlobalQ] = useState("");
@@ -134,52 +119,32 @@ export default function PublicListingsTable() {
   const [sortKey, setSortKey] = useState<SortKey>("updated_at");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      setErr(null);
-
-      const { data, error } = await supabase
-        .from("properties")
-        .select(
-          "id,code,caption,category,city,property_type,furnishing,bedrooms,with_balcony,pet_friendly,property_name,floor_number,unit_number,area_sqm,leasing_price,selling_price,parking,availability,updated_at"
-        )
-        .order("updated_at", { ascending: false })
-        .limit(5000);
-
-      if (error) {
-        setErr(error.message);
-        setRows([]);
-      } else {
-        setRows((data ?? []) as Listing[]);
-      }
-      setLoading(false);
-    })();
-  }, []);
+  // Debounce text inputs (esp global search)
+  const dGlobalQ = useDebounced(globalQ, 300);
+  const dCodeQ = useDebounced(codeQ, 250);
+  const dCaptionQ = useDebounced(captionQ, 250);
+  const dPropertyNameQ = useDebounced(propertyNameQ, 250);
+  const dFloorQ = useDebounced(floorQ, 250);
+  const dUnitQ = useDebounced(unitQ, 250);
+  const dParkingQ = useDebounced(parkingQ, 250);
 
   const options = useMemo(() => {
-    const uniq = (arr: (string | null)[]) =>
-      Array.from(new Set(arr.filter(Boolean) as string[])).sort();
-
+    // NOTE: with server-side search we can’t reliably compute *all* unique options from all rows
+    // without extra queries. For now we keep options blank (or you can replace with static lists).
+    // If you still want dropdown options, see note below after the code.
     return {
-      categories: uniq(rows.map((r) => r.category)),
-      cities: uniq(rows.map((r) => r.city)),
-      types: uniq(rows.map((r) => r.property_type)),
-      furnishings: uniq(rows.map((r) => r.furnishing)),
-      bedrooms: uniq(rows.map((r) => r.bedrooms)),
-      availability: uniq(rows.map((r) => r.availability)),
+      categories: [] as string[],
+      cities: [] as string[],
+      types: [] as string[],
+      furnishings: [] as string[],
+      bedrooms: [] as string[],
+      availability: [] as string[],
     };
-  }, [rows]);
+  }, []);
 
-  const filtered = useMemo(() => {
-    const g = globalQ.trim().toLowerCase();
-
-    const codeNeedle = codeQ.trim().toLowerCase();
-    const captionNeedle = captionQ.trim().toLowerCase();
-    const propNeedle = propertyNameQ.trim().toLowerCase();
-    const floorNeedle = floorQ.trim().toLowerCase();
-    const unitNeedle = unitQ.trim().toLowerCase();
-    const parkingNeedle = parkingQ.trim().toLowerCase();
+  async function fetchRows(signal?: AbortSignal) {
+    setLoading(true);
+    setErr(null);
 
     const nSqmMin = parseNumInput(sqmMin);
     const nSqmMax = parseNumInput(sqmMax);
@@ -188,89 +153,107 @@ export default function PublicListingsTable() {
     const nSaleMin = parseNumInput(saleMin);
     const nSaleMax = parseNumInput(saleMax);
 
-    return rows.filter((r) => {
-      // Per-column text search
-      if (codeNeedle && !toLowerSafe(r.code).includes(codeNeedle)) return false;
-      if (captionNeedle && !toLowerSafe(r.caption).includes(captionNeedle))
-        return false;
-      if (propNeedle && !toLowerSafe(r.property_name).includes(propNeedle))
-        return false;
-      if (floorNeedle && !toLowerSafe(r.floor_number).includes(floorNeedle))
-        return false;
-      if (unitNeedle && !toLowerSafe(r.unit_number).includes(unitNeedle))
-        return false;
-      if (parkingNeedle && !toLowerSafe(r.parking).includes(parkingNeedle))
-        return false;
+    // Base query with COUNT of ALL matches (exact count can be expensive on huge tables;
+    // this is still the most accurate approach. If it’s slow, we can switch to "planned".
+    let q = supabase
+      .from("properties")
+      .select(
+        "id,code,caption,category,city,property_type,furnishing,bedrooms,with_balcony,pet_friendly,property_name,floor_number,unit_number,area_sqm,leasing_price,selling_price,parking,availability,updated_at",
+        { count: "exact" }
+      );
 
-      // Dropdown exact matches
-      if (category && r.category !== category) return false;
-      if (city && r.city !== city) return false;
-      if (type && r.property_type !== type) return false;
-      if (furnishing && r.furnishing !== furnishing) return false;
-      if (bedrooms && r.bedrooms !== bedrooms) return false;
-      if (availability && r.availability !== availability) return false;
+    // Exact matches (dropdowns)
+    if (category) q = q.eq("category", category);
+    if (city) q = q.eq("city", city);
+    if (type) q = q.eq("property_type", type);
+    if (furnishing) q = q.eq("furnishing", furnishing);
+    if (bedrooms) q = q.eq("bedrooms", bedrooms);
+    if (availability) q = q.eq("availability", availability);
 
-      // Boolean dropdowns
-      if (balcony) {
-        const want = balcony === "true";
-        if (r.with_balcony !== want) return false;
-      }
-      if (pet) {
-        const want = pet === "true";
-        if (r.pet_friendly !== want) return false;
-      }
+    // Boolean dropdowns
+    if (balcony) q = q.eq("with_balcony", balcony === "true");
+    if (pet) q = q.eq("pet_friendly", pet === "true");
 
-      // Numeric ranges
-      if (nSqmMin !== null && (r.area_sqm ?? -Infinity) < nSqmMin) return false;
-      if (nSqmMax !== null && (r.area_sqm ?? Infinity) > nSqmMax) return false;
+    // Per-column partial search
+    if (dCodeQ.trim()) q = q.ilike("code", `%${dCodeQ.trim()}%`);
+    if (dCaptionQ.trim()) q = q.ilike("caption", `%${dCaptionQ.trim()}%`);
+    if (dPropertyNameQ.trim())
+      q = q.ilike("property_name", `%${dPropertyNameQ.trim()}%`);
+    if (dFloorQ.trim()) q = q.ilike("floor_number", `%${dFloorQ.trim()}%`);
+    if (dUnitQ.trim()) q = q.ilike("unit_number", `%${dUnitQ.trim()}%`);
+    if (dParkingQ.trim()) q = q.ilike("parking", `%${dParkingQ.trim()}%`);
 
-      if (
-        nLeaseMin !== null &&
-        (r.leasing_price ?? -Infinity) < nLeaseMin
-      )
-        return false;
-      if (nLeaseMax !== null && (r.leasing_price ?? Infinity) > nLeaseMax)
-        return false;
+    // Numeric ranges
+    if (nSqmMin !== null) q = q.gte("area_sqm", nSqmMin);
+    if (nSqmMax !== null) q = q.lte("area_sqm", nSqmMax);
 
-      if (nSaleMin !== null && (r.selling_price ?? -Infinity) < nSaleMin)
-        return false;
-      if (nSaleMax !== null && (r.selling_price ?? Infinity) > nSaleMax)
-        return false;
+    if (nLeaseMin !== null) q = q.gte("leasing_price", nLeaseMin);
+    if (nLeaseMax !== null) q = q.lte("leasing_price", nLeaseMax);
 
-      // Optional global search
-      if (g) {
-        const hay = [
-          r.code,
-          r.caption,
-          r.category,
-          r.city,
-          r.property_type,
-          r.furnishing,
-          r.bedrooms,
-          r.property_name,
-          r.floor_number,
-          r.unit_number,
-          r.parking,
-          r.availability,
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLowerCase();
+    if (nSaleMin !== null) q = q.gte("selling_price", nSaleMin);
+    if (nSaleMax !== null) q = q.lte("selling_price", nSaleMax);
 
-        if (!hay.includes(g)) return false;
-      }
+    // Global search across multiple columns (OR)
+    // NOTE: PostgREST "or" syntax is picky; we escape commas minimally by just using raw string.
+    const g = dGlobalQ.trim();
+    if (g) {
+      const escaped = g.replace(/%/g, "\\%").replace(/_/g, "\\_");
+      q = q.or(
+        [
+          `code.ilike.%${escaped}%`,
+          `caption.ilike.%${escaped}%`,
+          `category.ilike.%${escaped}%`,
+          `city.ilike.%${escaped}%`,
+          `property_type.ilike.%${escaped}%`,
+          `furnishing.ilike.%${escaped}%`,
+          `bedrooms.ilike.%${escaped}%`,
+          `property_name.ilike.%${escaped}%`,
+          `floor_number.ilike.%${escaped}%`,
+          `unit_number.ilike.%${escaped}%`,
+          `parking.ilike.%${escaped}%`,
+          `availability.ilike.%${escaped}%`,
+        ].join(",")
+      );
+    }
 
-      return true;
-    });
+    // Sorting + limit (THIS is what shows only 1000)
+    q = q.order(sortKey, { ascending: sortDir === "asc" }).limit(PAGE_LIMIT);
+
+    // Optional abort support (avoid race conditions)
+    if (signal?.aborted) return;
+
+    const { data, error, count } = await q;
+
+    if (signal?.aborted) return;
+
+    if (error) {
+      setErr(error.message);
+      setRows([]);
+      setTotalMatches(0);
+    } else {
+      setRows((data ?? []) as Listing[]);
+      setTotalMatches(count ?? 0);
+    }
+    setLoading(false);
+  }
+
+  // Run server-side query whenever filters/sort change
+  useEffect(() => {
+    const ctrl = new AbortController();
+    fetchRows(ctrl.signal);
+    return () => ctrl.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    rows,
-    globalQ,
-    codeQ,
-    captionQ,
-    propertyNameQ,
-    floorQ,
-    unitQ,
-    parkingQ,
+    // debounced text
+    dGlobalQ,
+    dCodeQ,
+    dCaptionQ,
+    dPropertyNameQ,
+    dFloorQ,
+    dUnitQ,
+    dParkingQ,
+
+    // dropdowns + ranges
     category,
     city,
     type,
@@ -285,56 +268,11 @@ export default function PublicListingsTable() {
     leaseMax,
     saleMin,
     saleMax,
+
+    // sort
+    sortKey,
+    sortDir,
   ]);
-
-  const sorted = useMemo(() => {
-    const dir = sortDir === "asc" ? 1 : -1;
-
-    const getCmp = (a: Listing, b: Listing) => {
-      switch (sortKey) {
-        case "code":
-          return cmpNullableString(a.code, b.code);
-        case "caption":
-          return cmpNullableString(a.caption, b.caption);
-        case "category":
-          return cmpNullableString(a.category, b.category);
-        case "city":
-          return cmpNullableString(a.city, b.city);
-        case "property_type":
-          return cmpNullableString(a.property_type, b.property_type);
-        case "furnishing":
-          return cmpNullableString(a.furnishing, b.furnishing);
-        case "bedrooms":
-          return cmpNullableString(a.bedrooms, b.bedrooms);
-        case "with_balcony":
-          return cmpNullableBool(a.with_balcony, b.with_balcony);
-        case "pet_friendly":
-          return cmpNullableBool(a.pet_friendly, b.pet_friendly);
-        case "property_name":
-          return cmpNullableString(a.property_name, b.property_name);
-        case "floor_number":
-          return cmpNullableString(a.floor_number, b.floor_number);
-        case "unit_number":
-          return cmpNullableString(a.unit_number, b.unit_number);
-        case "area_sqm":
-          return cmpNullableNumber(a.area_sqm, b.area_sqm);
-        case "leasing_price":
-          return cmpNullableNumber(a.leasing_price, b.leasing_price);
-        case "selling_price":
-          return cmpNullableNumber(a.selling_price, b.selling_price);
-        case "parking":
-          return cmpNullableString(a.parking, b.parking);
-        case "availability":
-          return cmpNullableString(a.availability, b.availability);
-        case "updated_at":
-          return cmpDateIso(a.updated_at, b.updated_at);
-        default:
-          return 0;
-      }
-    };
-
-    return [...filtered].sort((a, b) => dir * getCmp(a, b));
-  }, [filtered, sortKey, sortDir]);
 
   function toggleSort(k: SortKey) {
     if (sortKey === k) {
@@ -352,6 +290,7 @@ export default function PublicListingsTable() {
 
   function resetAll() {
     setGlobalQ("");
+
     setCodeQ("");
     setCaptionQ("");
     setPropertyNameQ("");
@@ -380,10 +319,7 @@ export default function PublicListingsTable() {
     setSortDir("desc");
   }
 
-  if (loading) return <div className="p-6">Loading…</div>;
-  if (err) return <div className="p-6 text-red-600">Error: {err}</div>;
-
-  // Sticky header layout: header row height ~42px; filter row below it ~48px
+  // Sticky header layout
   const headTop = "top-0";
   const filterTop = "top-[42px]";
 
@@ -392,7 +328,7 @@ export default function PublicListingsTable() {
       <div className="p-4 border-b flex flex-col md:flex-row md:items-center gap-3">
         <input
           className="border rounded-md px-3 py-2 w-full md:w-[420px]"
-          placeholder="Global search (optional)…"
+          placeholder="Global search (searches entire DB)…"
           value={globalQ}
           onChange={(e) => setGlobalQ(e.target.value)}
         />
@@ -403,180 +339,324 @@ export default function PublicListingsTable() {
         >
           Reset
         </button>
+
         <div className="text-sm text-gray-600 md:ml-auto">
-          Showing <strong>{sorted.length}</strong> of{" "}
-          <strong>{rows.length}</strong>
+          {loading ? (
+            "Searching…"
+          ) : err ? (
+            <span className="text-red-600">Error: {err}</span>
+          ) : (
+            <>
+              Showing <strong>{rows.length}</strong> of{" "}
+              <strong>{totalMatches}</strong>
+              {totalMatches > PAGE_LIMIT ? (
+                <span className="text-gray-500">
+                  {" "}
+                  (showing first {PAGE_LIMIT})
+                </span>
+              ) : null}
+            </>
+          )}
         </div>
       </div>
 
       <div className="overflow-auto max-h-[70vh]">
         <table className="min-w-[1700px] w-full text-sm">
           <thead>
-            {/* Header row (sticky) */}
             <tr className={`bg-gray-50 sticky ${headTop} z-20`}>
-              {[
-  ["code", "Code"],
-  ["caption", "Caption"],
-  ["category", "Category"],
-  ["city", "City"],
-  ["property_type", "Type"],
-  ["furnishing", "Furnishing"],
-  ["bedrooms", "BR"],
-  ["with_balcony", "Balcony"],
-  ["pet_friendly", "Pet"],
-  ["property_name", "Property Name"],
-  ["floor_number", "Floor"],
-  ["unit_number", "Unit"],
-  ["area_sqm", "sqm"],
-  ["leasing_price", "Lease"],
-  ["selling_price", "Sale"],
-  ["parking", "Parking"],
-  ["availability", "Availability"],
-  ["updated_at", "Updated"],
-].map(([key, label]) => (
-  <th
-    key={key}
-    className={`text-left px-3 py-2 border-b cursor-pointer select-none
-      ${key === "caption" ? "whitespace-pre-line min-w-[420px]" : "whitespace-nowrap"}
-    `}
-    onClick={() => toggleSort(key as SortKey)}
-  >
-    {label}{" "}
-    <span className="text-gray-400">
-      {sortIndicator(key as SortKey)}
-    </span>
-  </th>
-))}
+              {(
+                [
+                  ["code", "Code"],
+                  ["caption", "Caption"],
+                  ["category", "Category"],
+                  ["city", "City"],
+                  ["property_type", "Type"],
+                  ["furnishing", "Furnishing"],
+                  ["bedrooms", "BR"],
+                  ["with_balcony", "Balcony"],
+                  ["pet_friendly", "Pet"],
+                  ["property_name", "Property Name"],
+                  ["floor_number", "Floor"],
+                  ["unit_number", "Unit"],
+                  ["area_sqm", "sqm"],
+                  ["leasing_price", "Lease"],
+                  ["selling_price", "Sale"],
+                  ["parking", "Parking"],
+                  ["availability", "Availability"],
+                  ["updated_at", "Updated"],
+                ] as [SortKey, string][]
+              ).map(([key, label]) => (
+                <th
+                  key={key}
+                  className={`text-left px-3 py-2 border-b cursor-pointer select-none ${
+                    key === "caption"
+                      ? "whitespace-pre-line min-w-[420px]"
+                      : "whitespace-nowrap"
+                  }`}
+                  onClick={() => toggleSort(key)}
+                >
+                  {label}{" "}
+                  <span className="text-gray-400">{sortIndicator(key)}</span>
+                </th>
+              ))}
             </tr>
 
-            {/* Filter row (sticky) */}
             <tr className={`bg-white sticky ${filterTop} z-10`}>
               <th className="px-2 py-2 border-b">
-                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={codeQ} onChange={(e) => setCodeQ(e.target.value)} />
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Search…"
+                  value={codeQ}
+                  onChange={(e) => setCodeQ(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={captionQ} onChange={(e) => setCaptionQ(e.target.value)} />
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Search…"
+                  value={captionQ}
+                  onChange={(e) => setCaptionQ(e.target.value)}
+                />
               </th>
+
+              {/* For now, keep dropdowns as text inputs if you don’t have option lists */}
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={category} onChange={(e) => setCategory(e.target.value)}>
-                  <option value="">All</option>
-                  {options.categories.map((v) => (<option key={v} value={v}>{v}</option>))}
-                </select>
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Category…"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={city} onChange={(e) => setCity(e.target.value)}>
-                  <option value="">All</option>
-                  {options.cities.map((v) => (<option key={v} value={v}>{v}</option>))}
-                </select>
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="City…"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={type} onChange={(e) => setType(e.target.value)}>
-                  <option value="">All</option>
-                  {options.types.map((v) => (<option key={v} value={v}>{v}</option>))}
-                </select>
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Type…"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={furnishing} onChange={(e) => setFurnishing(e.target.value)}>
-                  <option value="">All</option>
-                  {options.furnishings.map((v) => (<option key={v} value={v}>{v}</option>))}
-                </select>
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Furnishing…"
+                  value={furnishing}
+                  onChange={(e) => setFurnishing(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={bedrooms} onChange={(e) => setBedrooms(e.target.value)}>
-                  <option value="">All</option>
-                  {options.bedrooms.map((v) => (<option key={v} value={v}>{v}</option>))}
-                </select>
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="BR…"
+                  value={bedrooms}
+                  onChange={(e) => setBedrooms(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={balcony} onChange={(e) => setBalcony(e.target.value as BoolFilter)}>
+                <select
+                  className="border rounded px-2 py-1 w-full"
+                  value={balcony}
+                  onChange={(e) => setBalcony(e.target.value as BoolFilter)}
+                >
                   <option value="">Any</option>
                   <option value="true">Yes</option>
                   <option value="false">No</option>
                 </select>
               </th>
+
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={pet} onChange={(e) => setPet(e.target.value as BoolFilter)}>
+                <select
+                  className="border rounded px-2 py-1 w-full"
+                  value={pet}
+                  onChange={(e) => setPet(e.target.value as BoolFilter)}
+                >
                   <option value="">Any</option>
                   <option value="true">Yes</option>
                   <option value="false">No</option>
                 </select>
               </th>
+
               <th className="px-2 py-2 border-b">
-                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={propertyNameQ} onChange={(e) => setPropertyNameQ(e.target.value)} />
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Search…"
+                  value={propertyNameQ}
+                  onChange={(e) => setPropertyNameQ(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={floorQ} onChange={(e) => setFloorQ(e.target.value)} />
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Search…"
+                  value={floorQ}
+                  onChange={(e) => setFloorQ(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={unitQ} onChange={(e) => setUnitQ(e.target.value)} />
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Search…"
+                  value={unitQ}
+                  onChange={(e) => setUnitQ(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
                 <div className="flex gap-2">
-                  <input className="border rounded px-2 py-1 w-full" placeholder="Min" value={sqmMin} onChange={(e) => setSqmMin(e.target.value)} />
-                  <input className="border rounded px-2 py-1 w-full" placeholder="Max" value={sqmMax} onChange={(e) => setSqmMax(e.target.value)} />
+                  <input
+                    className="border rounded px-2 py-1 w-full"
+                    placeholder="Min"
+                    value={sqmMin}
+                    onChange={(e) => setSqmMin(e.target.value)}
+                  />
+                  <input
+                    className="border rounded px-2 py-1 w-full"
+                    placeholder="Max"
+                    value={sqmMax}
+                    onChange={(e) => setSqmMax(e.target.value)}
+                  />
                 </div>
               </th>
+
               <th className="px-2 py-2 border-b">
                 <div className="flex gap-2">
-                  <input className="border rounded px-2 py-1 w-full" placeholder="Min" value={leaseMin} onChange={(e) => setLeaseMin(e.target.value)} />
-                  <input className="border rounded px-2 py-1 w-full" placeholder="Max" value={leaseMax} onChange={(e) => setLeaseMax(e.target.value)} />
+                  <input
+                    className="border rounded px-2 py-1 w-full"
+                    placeholder="Min"
+                    value={leaseMin}
+                    onChange={(e) => setLeaseMin(e.target.value)}
+                  />
+                  <input
+                    className="border rounded px-2 py-1 w-full"
+                    placeholder="Max"
+                    value={leaseMax}
+                    onChange={(e) => setLeaseMax(e.target.value)}
+                  />
                 </div>
               </th>
+
               <th className="px-2 py-2 border-b">
                 <div className="flex gap-2">
-                  <input className="border rounded px-2 py-1 w-full" placeholder="Min" value={saleMin} onChange={(e) => setSaleMin(e.target.value)} />
-                  <input className="border rounded px-2 py-1 w-full" placeholder="Max" value={saleMax} onChange={(e) => setSaleMax(e.target.value)} />
+                  <input
+                    className="border rounded px-2 py-1 w-full"
+                    placeholder="Min"
+                    value={saleMin}
+                    onChange={(e) => setSaleMin(e.target.value)}
+                  />
+                  <input
+                    className="border rounded px-2 py-1 w-full"
+                    placeholder="Max"
+                    value={saleMax}
+                    onChange={(e) => setSaleMax(e.target.value)}
+                  />
                 </div>
               </th>
+
               <th className="px-2 py-2 border-b">
-                <input className="border rounded px-2 py-1 w-full" placeholder="Search…" value={parkingQ} onChange={(e) => setParkingQ(e.target.value)} />
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Search…"
+                  value={parkingQ}
+                  onChange={(e) => setParkingQ(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b">
-                <select className="border rounded px-2 py-1 w-full" value={availability} onChange={(e) => setAvailability(e.target.value)}>
-                  <option value="">All</option>
-                  {options.availability.map((v) => (<option key={v} value={v}>{v}</option>))}
-                </select>
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Availability…"
+                  value={availability}
+                  onChange={(e) => setAvailability(e.target.value)}
+                />
               </th>
+
               <th className="px-2 py-2 border-b" />
             </tr>
           </thead>
 
           <tbody>
-            {sorted.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td className="px-3 py-4 text-gray-600" colSpan={18}>
+                  Loading…
+                </td>
+              </tr>
+            ) : err ? (
+              <tr>
+                <td className="px-3 py-4 text-red-600" colSpan={18}>
+                  Error: {err}
+                </td>
+              </tr>
+            ) : rows.length === 0 ? (
               <tr>
                 <td className="px-3 py-4 text-gray-600" colSpan={18}>
                   No listings match your filters.
                 </td>
               </tr>
             ) : (
-              sorted.map((r) => (
+              rows.map((r) => (
                 <tr key={r.id} className="hover:bg-gray-50">
                   <td className="px-3 py-2 border-b">{r.code ?? ""}</td>
-<td className="px-3 py-2 border-b whitespace-pre-line min-w-[420px]">
-  {r.caption ?? ""}
-</td>                  <td className="px-3 py-2 border-b">{r.category ?? ""}</td>
+
+                  <td className="px-3 py-2 border-b whitespace-pre-line min-w-[420px]">
+                    {r.caption ?? ""}
+                  </td>
+
+                  <td className="px-3 py-2 border-b">{r.category ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.city ?? ""}</td>
-                  <td className="px-3 py-2 border-b">{r.property_type ?? ""}</td>
+                  <td className="px-3 py-2 border-b">
+                    {r.property_type ?? ""}
+                  </td>
                   <td className="px-3 py-2 border-b">{r.furnishing ?? ""}</td>
                   <td className="px-3 py-2 border-b">{r.bedrooms ?? ""}</td>
-                  <td className="px-3 py-2 border-b">{fmtBool(r.with_balcony)}</td>
-                  <td className="px-3 py-2 border-b">{fmtBool(r.pet_friendly)}</td>
-                  <td className="px-3 py-2 border-b">{r.property_name ?? ""}</td>
-                  <td className="px-3 py-2 border-b">{r.floor_number ?? ""}</td>
+                  <td className="px-3 py-2 border-b">
+                    {fmtBool(r.with_balcony)}
+                  </td>
+                  <td className="px-3 py-2 border-b">
+                    {fmtBool(r.pet_friendly)}
+                  </td>
+                  <td className="px-3 py-2 border-b">
+                    {r.property_name ?? ""}
+                  </td>
+                  <td className="px-3 py-2 border-b">
+                    {r.floor_number ?? ""}
+                  </td>
                   <td className="px-3 py-2 border-b">{r.unit_number ?? ""}</td>
                   <td className="px-3 py-2 border-b">{fmtNum(r.area_sqm)}</td>
-                  <td className="px-3 py-2 border-b">{fmtNum(r.leasing_price)}</td>
-                  <td className="px-3 py-2 border-b">{fmtNum(r.selling_price)}</td>
-                  <td className="px-3 py-2 border-b">{r.parking ?? ""}</td>
-                  <td className="px-3 py-2 border-b">{r.availability ?? ""}</td>
                   <td className="px-3 py-2 border-b">
-{r.updated_at
-  ? new Date(r.updated_at).toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    })
-  : ""}
+                    {fmtNum(r.leasing_price)}
+                  </td>
+                  <td className="px-3 py-2 border-b">
+                    {fmtNum(r.selling_price)}
+                  </td>
+                  <td className="px-3 py-2 border-b">{r.parking ?? ""}</td>
+                  <td className="px-3 py-2 border-b">
+                    {r.availability ?? ""}
+                  </td>
+                  <td className="px-3 py-2 border-b">
+                    {r.updated_at
+                      ? new Date(r.updated_at).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : ""}
                   </td>
                 </tr>
               ))
