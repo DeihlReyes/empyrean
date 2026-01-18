@@ -1,7 +1,6 @@
 // src/components/PublicListingsTable.tsx
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 type Listing = {
@@ -131,19 +130,6 @@ export default function PublicListingsTable() {
   const dFloorQ = useDebounced(floorQ, 250);
   const dUnitQ = useDebounced(unitQ, 250);
   const dParkingQ = useDebounced(parkingQ, 250);
-
-  const options = useMemo(() => {
-    // NOTE: with server-side search we can’t reliably compute *all* unique options from all rows
-    // without extra queries. For now we keep options blank (or you can replace with static lists).
-    return {
-      categories: [] as string[],
-      cities: [] as string[],
-      types: [] as string[],
-      furnishings: [] as string[],
-      bedrooms: [] as string[],
-      availability: [] as string[],
-    };
-  }, []);
 
   async function fetchRows(signal?: AbortSignal) {
     setLoading(true);
