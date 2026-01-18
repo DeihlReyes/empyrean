@@ -16,6 +16,7 @@ type Listing = {
   with_balcony: boolean | null;
   pet_friendly: boolean | null;
   property_name: string | null;
+  tower_name: string | null; // ✅ NEW
   floor_number: string | null;
   unit_number: string | null;
   area_sqm: number | null;
@@ -39,6 +40,7 @@ type SortKey =
   | "with_balcony"
   | "pet_friendly"
   | "property_name"
+  | "tower_name" // ✅ NEW
   | "floor_number"
   | "unit_number"
   | "area_sqm"
@@ -94,6 +96,7 @@ export default function PublicListingsTable() {
   const [codeQ, setCodeQ] = useState("");
   const [captionQ, setCaptionQ] = useState("");
   const [propertyNameQ, setPropertyNameQ] = useState("");
+  const [towerNameQ, setTowerNameQ] = useState(""); // ✅ NEW
   const [floorQ, setFloorQ] = useState("");
   const [unitQ, setUnitQ] = useState("");
   const [parkingQ, setParkingQ] = useState("");
@@ -124,6 +127,7 @@ export default function PublicListingsTable() {
   const dCodeQ = useDebounced(codeQ, 250);
   const dCaptionQ = useDebounced(captionQ, 250);
   const dPropertyNameQ = useDebounced(propertyNameQ, 250);
+  const dTowerNameQ = useDebounced(towerNameQ, 250); // ✅ NEW
   const dFloorQ = useDebounced(floorQ, 250);
   const dUnitQ = useDebounced(unitQ, 250);
   const dParkingQ = useDebounced(parkingQ, 250);
@@ -131,7 +135,6 @@ export default function PublicListingsTable() {
   const options = useMemo(() => {
     // NOTE: with server-side search we can’t reliably compute *all* unique options from all rows
     // without extra queries. For now we keep options blank (or you can replace with static lists).
-    // If you still want dropdown options, see note below after the code.
     return {
       categories: [] as string[],
       cities: [] as string[],
@@ -153,12 +156,10 @@ export default function PublicListingsTable() {
     const nSaleMin = parseNumInput(saleMin);
     const nSaleMax = parseNumInput(saleMax);
 
-    // Base query with COUNT of ALL matches (exact count can be expensive on huge tables;
-    // this is still the most accurate approach. If it’s slow, we can switch to "planned".
     let q = supabase
       .from("properties")
       .select(
-        "id,code,caption,category,city,property_type,furnishing,bedrooms,with_balcony,pet_friendly,property_name,floor_number,unit_number,area_sqm,leasing_price,selling_price,parking,availability,updated_at",
+        "id,code,caption,category,city,property_type,furnishing,bedrooms,with_balcony,pet_friendly,property_name,tower_name,floor_number,unit_number,area_sqm,leasing_price,selling_price,parking,availability,updated_at",
         { count: "exact" }
       );
 
@@ -179,6 +180,7 @@ export default function PublicListingsTable() {
     if (dCaptionQ.trim()) q = q.ilike("caption", `%${dCaptionQ.trim()}%`);
     if (dPropertyNameQ.trim())
       q = q.ilike("property_name", `%${dPropertyNameQ.trim()}%`);
+    if (dTowerNameQ.trim()) q = q.ilike("tower_name", `%${dTowerNameQ.trim()}%`); // ✅ NEW
     if (dFloorQ.trim()) q = q.ilike("floor_number", `%${dFloorQ.trim()}%`);
     if (dUnitQ.trim()) q = q.ilike("unit_number", `%${dUnitQ.trim()}%`);
     if (dParkingQ.trim()) q = q.ilike("parking", `%${dParkingQ.trim()}%`);
@@ -194,7 +196,6 @@ export default function PublicListingsTable() {
     if (nSaleMax !== null) q = q.lte("selling_price", nSaleMax);
 
     // Global search across multiple columns (OR)
-    // NOTE: PostgREST "or" syntax is picky; we escape commas minimally by just using raw string.
     const g = dGlobalQ.trim();
     if (g) {
       const escaped = g.replace(/%/g, "\\%").replace(/_/g, "\\_");
@@ -208,6 +209,7 @@ export default function PublicListingsTable() {
           `furnishing.ilike.%${escaped}%`,
           `bedrooms.ilike.%${escaped}%`,
           `property_name.ilike.%${escaped}%`,
+          `tower_name.ilike.%${escaped}%`, // ✅ NEW
           `floor_number.ilike.%${escaped}%`,
           `unit_number.ilike.%${escaped}%`,
           `parking.ilike.%${escaped}%`,
@@ -219,7 +221,6 @@ export default function PublicListingsTable() {
     // Sorting + limit (THIS is what shows only 1000)
     q = q.order(sortKey, { ascending: sortDir === "asc" }).limit(PAGE_LIMIT);
 
-    // Optional abort support (avoid race conditions)
     if (signal?.aborted) return;
 
     const { data, error, count } = await q;
@@ -249,6 +250,7 @@ export default function PublicListingsTable() {
     dCodeQ,
     dCaptionQ,
     dPropertyNameQ,
+    dTowerNameQ, // ✅ NEW
     dFloorQ,
     dUnitQ,
     dParkingQ,
@@ -294,6 +296,7 @@ export default function PublicListingsTable() {
     setCodeQ("");
     setCaptionQ("");
     setPropertyNameQ("");
+    setTowerNameQ(""); // ✅ NEW
     setFloorQ("");
     setUnitQ("");
     setParkingQ("");
@@ -319,7 +322,6 @@ export default function PublicListingsTable() {
     setSortDir("desc");
   }
 
-  // Sticky header layout
   const headTop = "top-0";
   const filterTop = "top-[42px]";
 
@@ -361,7 +363,7 @@ export default function PublicListingsTable() {
       </div>
 
       <div className="overflow-auto max-h-[70vh]">
-        <table className="min-w-[1700px] w-full text-sm">
+        <table className="min-w-[1800px] w-full text-sm">
           <thead>
             <tr className={`bg-gray-50 sticky ${headTop} z-20`}>
               {(
@@ -376,6 +378,7 @@ export default function PublicListingsTable() {
                   ["with_balcony", "Balcony"],
                   ["pet_friendly", "Pet"],
                   ["property_name", "Property Name"],
+                  ["tower_name", "Tower"], // ✅ NEW
                   ["floor_number", "Floor"],
                   ["unit_number", "Unit"],
                   ["area_sqm", "sqm"],
@@ -420,7 +423,6 @@ export default function PublicListingsTable() {
                 />
               </th>
 
-              {/* For now, keep dropdowns as text inputs if you don’t have option lists */}
               <th className="px-2 py-2 border-b">
                 <input
                   className="border rounded px-2 py-1 w-full"
@@ -496,6 +498,16 @@ export default function PublicListingsTable() {
                   placeholder="Search…"
                   value={propertyNameQ}
                   onChange={(e) => setPropertyNameQ(e.target.value)}
+                />
+              </th>
+
+              {/* ✅ NEW Tower filter */}
+              <th className="px-2 py-2 border-b">
+                <input
+                  className="border rounded px-2 py-1 w-full"
+                  placeholder="Search…"
+                  value={towerNameQ}
+                  onChange={(e) => setTowerNameQ(e.target.value)}
                 />
               </th>
 
@@ -593,19 +605,19 @@ export default function PublicListingsTable() {
           <tbody>
             {loading ? (
               <tr>
-                <td className="px-3 py-4 text-gray-600" colSpan={18}>
+                <td className="px-3 py-4 text-gray-600" colSpan={19}>
                   Loading…
                 </td>
               </tr>
             ) : err ? (
               <tr>
-                <td className="px-3 py-4 text-red-600" colSpan={18}>
+                <td className="px-3 py-4 text-red-600" colSpan={19}>
                   Error: {err}
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td className="px-3 py-4 text-gray-600" colSpan={18}>
+                <td className="px-3 py-4 text-gray-600" colSpan={19}>
                   No listings match your filters.
                 </td>
               </tr>
@@ -634,6 +646,10 @@ export default function PublicListingsTable() {
                   <td className="px-3 py-2 border-b">
                     {r.property_name ?? ""}
                   </td>
+
+                  {/* ✅ NEW Tower cell */}
+                  <td className="px-3 py-2 border-b">{r.tower_name ?? ""}</td>
+
                   <td className="px-3 py-2 border-b">
                     {r.floor_number ?? ""}
                   </td>
