@@ -62,8 +62,6 @@ const FEATURE_GROUPS: FeatureGroup[] = [
       { label: "Verified Agents", icon: BadgeCheck },
       { label: "Secured Transactions", icon: ShieldCheck },
       { label: "Faster Reporting & Accountability", icon: MessageSquareWarning },
-
-      // 🔜 Coming Soon
       { label: "Review Agents", icon: UserCheck, comingSoon: true },
       { label: "Pay through Credit Card", icon: CreditCard, comingSoon: true },
     ],
@@ -73,8 +71,6 @@ const FEATURE_GROUPS: FeatureGroup[] = [
     items: [
       { label: "Manage Current Lease", icon: FileSignature },
       { label: "24/7 Customer Service", icon: Headphones },
-
-      // 🔜 Coming Soon
       { label: "Lease Administration", icon: ClipboardList, comingSoon: true },
       {
         label: "Access to other Professional Services",
@@ -88,28 +84,47 @@ const FEATURE_GROUPS: FeatureGroup[] = [
 ];
 
 export default function BrokerAgentDeveloperPage() {
-  const screenshots = useMemo(
+  // ✅ NEW: Program snapshots (DS1..DS3)
+  const programShots = useMemo(
+    () => Array.from({ length: 3 }, (_, i) => i + 1),
+    []
+  );
+
+  // ✅ Existing: App screenshots (SS1..SS10)
+  const appScreenshots = useMemo(
     () => Array.from({ length: 10 }, (_, i) => i + 1),
     []
   );
 
-  const [activeImage, setActiveImage] = useState<number | null>(null);
+  // ✅ NEW: unified modal state for both DS + SS
+  const [activeImage, setActiveImage] = useState<{
+    type: "program" | "app";
+    index: number;
+  } | null>(null);
 
   const goPrev = useCallback(() => {
     setActiveImage((current) => {
-      if (current === null) return null;
-      const idx = screenshots.indexOf(current);
-      return screenshots[(idx - 1 + screenshots.length) % screenshots.length];
+      if (!current) return null;
+
+      const list = current.type === "program" ? programShots : appScreenshots;
+      const idx = list.indexOf(current.index);
+      const nextIndex = list[(idx - 1 + list.length) % list.length];
+
+      return { ...current, index: nextIndex };
     });
-  }, [screenshots]);
+  }, [programShots, appScreenshots]);
 
   const goNext = useCallback(() => {
     setActiveImage((current) => {
-      if (current === null) return null;
-      const idx = screenshots.indexOf(current);
-      return screenshots[(idx + 1) % screenshots.length];
+      if (!current) return null;
+
+      const list = current.type === "program" ? programShots : appScreenshots;
+      const idx = list.indexOf(current.index);
+      const nextIndex = list[(idx + 1) % list.length];
+
+      return { ...current, index: nextIndex };
     });
-  }, [screenshots]);
+  }, [programShots, appScreenshots]);
 
   // Keyboard navigation: ESC closes, arrows navigate
   useEffect(() => {
@@ -303,6 +318,58 @@ export default function BrokerAgentDeveloperPage() {
           </div>
         </section>
 
+        {/* ✅ NEW: Program Rough Snapshots V1 */}
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Program Rough Snapshots V1
+        </h2>
+
+        <section className="mb-16">
+          <div className="relative mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {programShots.map((index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setActiveImage({ type: "program", index })}
+                  className="
+                    relative rounded-2xl overflow-hidden
+                    border border-gray-200 bg-white
+                    shadow-md hover:shadow-xl
+                    transition-transform duration-300
+                    hover:-translate-y-1
+                    focus:outline-none
+                  "
+                >
+                  <div className="relative w-full aspect-[16/10] bg-white">
+                    <Image
+                      src={`/assets/DS${index}.png`}
+                      alt={`Program Screenshot ${index}`}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 33vw"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (!target.src.endsWith(`DS${index}.jpg`)) {
+                          target.src = `/assets/DS${index}.jpg`;
+                        }
+                      }}
+                    />
+                  </div>
+
+                  <div className="px-3 py-2 border-t border-gray-100">
+                    <div className="text-xs text-gray-500">DS{index}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Tip: Swipe left/right in the fullscreen viewer to browse images.
+            </p>
+          </div>
+        </section>
+
+        {/* ✅ Existing: Application Rough Snapshots V1 */}
         <h2 className="text-2xl font-bold text-center mb-6">
           Application Rough Snapshots V1
         </h2>
@@ -311,11 +378,11 @@ export default function BrokerAgentDeveloperPage() {
         <section className="mb-16">
           <div className="relative mx-auto max-w-5xl">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {screenshots.map((index) => (
+              {appScreenshots.map((index) => (
                 <button
                   key={index}
                   type="button"
-                  onClick={() => setActiveImage(index)}
+                  onClick={() => setActiveImage({ type: "app", index })}
                   className="
                     relative rounded-2xl overflow-hidden
                     border border-gray-200 bg-white
@@ -444,7 +511,7 @@ export default function BrokerAgentDeveloperPage() {
           </Button>
         </div>
 
-        {/* Fullscreen Modal Viewer */}
+        {/* ✅ UPDATED: Fullscreen Modal Viewer (DS + SS) */}
         {activeImage !== null && (
           <div
             className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 sm:p-6"
@@ -462,7 +529,12 @@ export default function BrokerAgentDeveloperPage() {
               {/* Header / Controls */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                 <div className="text-xs text-gray-500">
-                  SS{activeImage} / {screenshots.length}
+                  {activeImage.type === "program" ? "DS" : "SS"}
+                  {activeImage.index} /{" "}
+                  {(activeImage.type === "program"
+                    ? programShots
+                    : appScreenshots
+                  ).length}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -495,18 +567,29 @@ export default function BrokerAgentDeveloperPage() {
 
               {/* Modal image sizing */}
               <div className="flex items-center justify-center bg-white py-4">
-                <div className="relative w-[92vw] max-w-[420px] h-[72vh] sm:h-[78vh]">
+                <div className="relative w-[92vw] max-w-[860px] h-[72vh] sm:h-[78vh]">
                   <Image
-                    src={`/assets/SS${activeImage}.png`}
-                    alt={`Start App Screenshot ${activeImage}`}
+                    src={
+                      activeImage.type === "program"
+                        ? `/assets/DS${activeImage.index}.png`
+                        : `/assets/SS${activeImage.index}.png`
+                    }
+                    alt={
+                      activeImage.type === "program"
+                        ? `Program Screenshot ${activeImage.index}`
+                        : `Start App Screenshot ${activeImage.index}`
+                    }
                     fill
                     className="object-contain"
                     priority
-                    sizes="(max-width: 640px) 92vw, 420px"
+                    sizes="(max-width: 640px) 92vw, 860px"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      if (!target.src.endsWith(`SS${activeImage}.jpg`)) {
-                        target.src = `/assets/SS${activeImage}.jpg`;
+                      const prefix = activeImage.type === "program" ? "DS" : "SS";
+                      if (
+                        !target.src.endsWith(`${prefix}${activeImage.index}.jpg`)
+                      ) {
+                        target.src = `/assets/${prefix}${activeImage.index}.jpg`;
                       }
                     }}
                   />
