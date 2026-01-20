@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -20,7 +19,13 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
   userType: z.enum(
-    ["property-owner", "tenant-guest", "broker-agent", "developer"],
+    [
+      "property-owner",
+      "buyer-tenant-guest",
+      "broker-agent-realtyfirm",
+      "developer-representative",
+      "business-professional",
+    ],
     {
       required_error: "Please select a user type.",
     }
@@ -40,8 +45,6 @@ const formSchema = z.object({
 });
 
 export default function ContactForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,27 +57,19 @@ export default function ContactForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-
-    try {
-      // In a real application, you would send this data to your API
-      console.log(values);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      toast("Form submitted successfully!", {
-        description: "We'll get back to you as soon as possible.",
-      });
-
-      form.reset();
-    } catch {
-      toast("Something went wrong.", {
-        description: "Your form was not submitted. Please try again.",
-      });
-    } finally {
-      setIsSubmitting(false);
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+    if (res.ok) {
+      toast.success(
+        "Thank you! A representative from Empyrean will be in touch."
+      );
+    } else {
+      toast.error("Something went wrong. Please try again.");
     }
+    form.reset();
   }
 
   return (
@@ -91,97 +86,49 @@ export default function ContactForm() {
                   defaultValue={field.value}
                   className="flex flex-wrap gap-3 justify-center"
                 >
-                  <div
-                    className={`
-                    flex items-center space-x-2 rounded-full px-4 py-2 cursor-pointer
-                    ${
-                      field.value === "property-owner"
-                        ? "bg-[#494949] text-white"
-                        : "border border-gray-300 text-[#494949]"
-                    }
-                  `}
-                  >
-                    <RadioGroupItem
-                      value="property-owner"
-                      id="property-owner"
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor="property-owner"
-                      className="text-sm font-medium cursor-pointer"
+                  {[
+                    {
+                      value: "property-owner",
+                      label: "Property Owner",
+                    },
+                    {
+                      value: "buyer-tenant-guest",
+                      label: "Buyer/Tenant/Guest",
+                    },
+                    {
+                      value: "broker-agent-realtyfirm",
+                      label: "Broker/Agent/Realty Firm",
+                    },
+                    {
+                      value: "developer-representative",
+                      label: "Developer Representative",
+                    },
+                    {
+                      value: "business-professional",
+                      label: "Business/Professional",
+                    },
+                  ].map(({ value, label }) => (
+                    <div
+                      key={value}
+                      className={`flex items-center space-x-2 rounded-full px-4 py-2 cursor-pointer ${
+                        field.value === value
+                          ? "bg-[#494949] text-white"
+                          : "border border-gray-300 text-[#494949]"
+                      }`}
                     >
-                      Property Owners
-                    </label>
-                  </div>
-
-                  <div
-                    className={`
-                    flex items-center space-x-2 rounded-full px-4 py-2 cursor-pointer
-                    ${
-                      field.value === "tenant-guest"
-                        ? "bg-[#494949] text-white"
-                        : "border border-gray-300 text-[#494949]"
-                    }
-                  `}
-                  >
-                    <RadioGroupItem
-                      value="tenant-guest"
-                      id="tenant-guest"
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor="tenant-guest"
-                      className="text-sm font-medium cursor-pointer"
-                    >
-                      Tenants/Guests
-                    </label>
-                  </div>
-
-                  <div
-                    className={`
-                    flex items-center space-x-2 rounded-full px-4 py-2 cursor-pointer
-                    ${
-                      field.value === "broker-agent"
-                        ? "bg-[#494949] text-white"
-                        : "border border-gray-300 text-[#494949]"
-                    }
-                  `}
-                  >
-                    <RadioGroupItem
-                      value="broker-agent"
-                      id="broker-agent"
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor="broker-agent"
-                      className="text-sm font-medium cursor-pointer"
-                    >
-                      Broker/Agent
-                    </label>
-                  </div>
-
-                  <div
-                    className={`
-                    flex items-center space-x-2 rounded-full px-4 py-2 cursor-pointer
-                    ${
-                      field.value === "developer"
-                        ? "bg-[#494949] text-white"
-                        : "border border-gray-300 text-[#494949]"
-                    }
-                  `}
-                  >
-                    <RadioGroupItem
-                      value="developer"
-                      id="developer"
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor="developer"
-                      className="text-sm font-medium cursor-pointer"
-                    >
-                      Developer
-                    </label>
-                  </div>
+                      <RadioGroupItem
+                        value={value}
+                        id={value}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor={value}
+                        className="text-sm font-medium cursor-pointer"
+                      >
+                        {label}
+                      </label>
+                    </div>
+                  ))}
                 </RadioGroup>
               </FormControl>
               <FormMessage />
@@ -208,24 +155,31 @@ export default function ContactForm() {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your email"
-                    {...field}
-                    className="rounded-md"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <FormItem>
+            <FormLabel>Phone Number</FormLabel>
+            <FormControl>
+              <Input placeholder="Your phone number" className="rounded-md" />
+            </FormControl>
+          </FormItem>
         </div>
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email Address</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Your Email Address"
+                  {...field}
+                  className="rounded-md"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -253,7 +207,7 @@ export default function ContactForm() {
               <FormLabel>Message</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Your message and requirements"
+                  placeholder="Your message"
                   {...field}
                   className="rounded-md min-h-[150px]"
                 />
@@ -266,10 +220,10 @@ export default function ContactForm() {
         <div className="flex justify-start">
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={form.formState.isSubmitting}
             className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-4 w-full"
           >
-            {isSubmitting ? "Sending..." : "Send"}
+            {form.formState.isSubmitting ? "Sending..." : "Send"}
           </Button>
         </div>
       </form>

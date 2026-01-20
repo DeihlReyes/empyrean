@@ -10,19 +10,21 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Company Description */}
           <div className="space-y-4">
-            <Image
-              src="/assets/empyrean.png"
-              alt="Empyrean Real Estate Solutions"
-              width={169}
-              height={100}
-              className="bg-transparent"
-            />
-            <h2 className="text-gray-900 text-xl font-bold">
+           <Link href="https://empyrean.ph" target="_blank" rel="noopener noreferrer">
+  <Image
+    src="/assets/empyrean.png"
+    alt="Empyrean Real Estate Solutions"
+    width={169}
+    height={100}
+    className="bg-transparent hover:opacity-80 transition-opacity"
+  />
+</Link>
+            <h2 className="text-gray-850 text-xl font-bold">
               Empyrean Real Estate Solutions
             </h2>
-            <p className="text-gray-600 max-w-md">
-              A one-stop gateway for all things real estate in the Philippines.
-              It doesn&apos;t have to be complicated. Your Real Estate, on us.
+            <p className="text-gray-800 max-w-md">
+              Your all-in-one access, a one-stop gateway for all things real estate in the Philippines.
+              You access us, you access everyone.
             </p>
           </div>
 
@@ -33,21 +35,21 @@ export default function Footer() {
               <p className="flex items-center gap-2">
                 <a
                   href="mailto:info@empyrean.ph"
-                  className="text-gray-700 hover:text-gray-900 transition-colors"
+                  className="text-gray-800 hover:text-gray-900 transition-colors"
                 >
                   info@empyrean.ph
                 </a>
               </p>
               <p className="flex items-center gap-2">
                 <a
-                  href="tel:+639338113533"
-                  className="text-gray-700 hover:text-gray-900 transition-colors"
+                  href="tel:+639565648765"
+                  className="text-gray-800 hover:text-gray-900 transition-colors"
                 >
-                  +639338113533
+                  +639565648765 (Viber/WhatsApp/Telegram)
                 </a>
               </p>
               <p className="flex items-center gap-2">
-                <span className="text-gray-700">
+                <span className="text-gray-800">
                   Salcedo Village, Baranggay Bel-Air, Makati City 1227
                 </span>
               </p>
@@ -58,13 +60,13 @@ export default function Footer() {
         {/* Social Media Links */}
         <div className="mt-8 pt-8 border-t border-gray-400">
           <div className="flex items-center justify-between">
-            <p className="text-gray-600 text-sm">
-              © {new Date().getFullYear()} Empyrean Real Estate Solutions. All
+            <p className="text-gray-800 text-sm">
+              © {new Date().getFullYear()} Empyrean Real Estate Corporation. All
               rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <Link
-                href="https://facebook.com/empyreanrealestatesolutions/"
+                href="https://facebook.com/empyreanrealestateph/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 transition-colors"
@@ -80,7 +82,7 @@ export default function Footer() {
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link
-                href="https://instagram.com/empyrean.res"
+                href="https://instagram.com/empyreanrealestate"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 transition-colors"

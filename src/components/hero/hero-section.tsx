@@ -75,17 +75,16 @@ export default function HeroSection() {
             style={{ opacity: headerOpacity }}
             className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
           >
-            ACCESS EVERYONE THROUGH EMPYREAN
+            ACCESS EVERYONE, THROUGH EMPYREAN
           </motion.h2>
 
           <motion.p
             style={{ opacity: subheaderOpacity }}
             className="md:text-lg mb-18 max-w-3xl mx-auto"
           >
-            Centralising all-things Real Estate, so it doesn&apos;t have to be
-            complicated for you.
+            Centralising all-things Real Estate in the Philippines. Streamlining the process.
             <br />
-            Your effective Real Estate Solutions, on us
+            You access us, you access everyone.
           </motion.p>
 
           <motion.div style={{ opacity: buttonOpacity }}>

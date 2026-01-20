@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Cinzel, Lora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+
 const cinzel = Cinzel({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -13,11 +16,12 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "Empyrean - Your Trusted Partner in Business Solutions",
+  title:
+    "Empyrean Real Estate Solutions - Your one-stop access to Philippine Real Estate",
   description:
-    "Empyrean provides innovative business solutions and services to help your company grow. Expert consulting, digital transformation, and strategic planning services.",
+    "Empyrean is a one-stop gateway for all things real estate in the Philippines. Backed by strong branding, an established system, and a built-in accountability in its name, the company delivers a seamless, transparent, and results-oriented service-based experience.",
   keywords:
-    "business solutions, consulting, digital transformation, strategic planning, business growth",
+    "real estate, real estate solutions, brokerage, property management, consulting",
   authors: [{ name: "Empyrean" }],
   creator: "Empyrean",
   publisher: "Empyrean",
@@ -25,17 +29,19 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://empyrean.com",
-    title: "Empyrean - Your Trusted Partner in Business Solutions",
+    url: "https://empyrean.ph",
+    title:
+      "Empyrean Real Estate Solutions - Your one-stop access to Philippine Real Estate",
     description:
-      "Empyrean provides innovative business solutions and services to help your company grow. Expert consulting, digital transformation, and strategic planning services.",
+      "Empyrean is a one-stop gateway for all things real estate in the Philippines. Backed by strong branding, an established system, and a built-in accountability in its name, the company delivers a seamless, transparent, and results-oriented service-based experience.",
     siteName: "Empyrean",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Empyrean - Your Trusted Partner in Business Solutions",
+    title:
+      "Empyrean Real Estate Solutions - Your one-stop access to Philippine Real Estate",
     description:
-      "Empyrean provides innovative business solutions and services to help your company grow.",
+      "Empyrean is a company you can always get back to for all-things Real Estate in the Philippines.",
     creator: "@empyrean",
   },
   viewport: "width=device-width, initial-scale=1",
@@ -52,8 +58,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${cinzel.variable} ${lora.variable} antialiased`}>
-        {/* <Header /> */}
+        <Header />
         {children}
+        <Footer />
         <Toaster />
       </body>
     </html>

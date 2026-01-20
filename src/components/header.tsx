@@ -29,30 +29,14 @@ import {
 } from "@/components/ui/accordion";
 
 const services = [
-  {
-    title: "I am a Property Owner",
-    icon: Building2,
-    href: "/services/property-owner",
-  },
-  {
-    title: "I am a Buyer/Tenant/Guest",
-    icon: Users,
-    href: "/services/buyer-tenant-guest",
-  },
+  { title: "I am a Property Owner", icon: Building2, href: "/services/property-owner" },
+  { title: "I am a Buyer/Tenant/Guest", icon: Users, href: "/services/buyer-tenant-guest" },
 ];
 
 const partners = [
-  {
-    title: "I am a Broker/Agent",
-    description: "Partner with us to expand your business",
-    icon: UserPlus,
-    href: "/services/broker-agent",
-  },
-  {
-    title: "I am a Developer",
-    icon: Building2,
-    href: "/services/developer",
-  },
+  { title: "I am a Broker/Agent/Realty Firm", description: "Partner with us to expand your business", icon: UserPlus, href: "/services/broker-agent" },
+  { title: "I am a Developer Representative", icon: Building2, href: "/services/developer" },
+  { title: "I am a Business/Professional", icon: Building2, href: "/services/business-professional" },
 ];
 
 const ListItem = React.forwardRef<
@@ -70,9 +54,7 @@ const ListItem = React.forwardRef<
           )}
           {...props}
         >
-          <h2 className="text-sm font-semibold leading-none text-gray-900">
-            {title}
-          </h2>
+          <h2 className="text-sm font-semibold leading-none text-gray-900">{title}</h2>
         </Link>
       </NavigationMenuLink>
     </li>
@@ -83,14 +65,12 @@ ListItem.displayName = "ListItem";
 export default function Header() {
   const [open, setOpen] = useState(false);
 
-  const closeSheet = () => {
-    setOpen(false);
-  };
+  const closeSheet = () => setOpen(false);
 
   return (
     <header className="w-full bg-white border-b border-gray-200 h-24 px-6 lg:px-12 flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <Link href="/" className="relative h-16 w-16">
+        <Link href="/home" className="relative h-16 w-16">
           <Image
             src="/assets/empyrean-logo.png"
             alt="Empyrean Logo"
@@ -98,9 +78,11 @@ export default function Header() {
             className="object-contain"
           />
         </Link>
-        <h1 className="text-gray-700 text-lg md:text-xl font-bold">
-          Empyrean Real Estate Solutions
-        </h1>
+        <Link href="https://empyrean.ph/home" className="no-underline hover:no-underline">
+          <h1 className="text-gray-800 text-base sm:text-lg md:text-xl font-bold">
+            Empyrean Real Estate Solutions
+          </h1>
+        </Link>
       </div>
 
       {/* Desktop Navigation */}
@@ -108,20 +90,12 @@ export default function Header() {
         <NavigationMenu>
           <NavigationMenuList className="gap-0 space-x-0 text-sm">
             <NavigationMenuItem>
-              <Button
-                variant="ghost"
-                className="text-[15px] font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                asChild
-              >
-                <Link href="/">Home</Link>
+              <Button variant="ghost" className="text-[15px] font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100" asChild>
+                <Link href="/home">Home</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button
-                variant="ghost"
-                className="text-[15px] font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                asChild
-              >
+              <Button variant="ghost" className="text-[15px] font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100" asChild>
                 <Link href="/about-us">About Us</Link>
               </Button>
             </NavigationMenuItem>
@@ -132,12 +106,7 @@ export default function Header() {
               <NavigationMenuContent className="bg-white border-none">
                 <ul className="grid w-[350px] gap-3 p-4">
                   {services.map((service) => (
-                    <ListItem
-                      key={service.title}
-                      title={service.title}
-                      icon={service.icon}
-                      href={service.href}
-                    />
+                    <ListItem key={service.title} title={service.title} icon={service.icon} href={service.href} />
                   ))}
                 </ul>
               </NavigationMenuContent>
@@ -149,22 +118,18 @@ export default function Header() {
               <NavigationMenuContent className="bg-white border-none">
                 <ul className="grid w-[350px] gap-3 p-4">
                   {partners.map((partner) => (
-                    <ListItem
-                      key={partner.title}
-                      title={partner.title}
-                      icon={partner.icon}
-                      href={partner.href}
-                    />
+                    <ListItem key={partner.title} title={partner.title} icon={partner.icon} href={partner.href} />
                   ))}
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button
-                variant="ghost"
-                className="text-[15px] font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                asChild
-              >
+              <Button variant="ghost" className="text-[15px] font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100" asChild>
+                <Link href="/philippinerealestateinventory">Philippine Real Estate Inventory</Link>
+              </Button>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Button variant="ghost" className="text-[15px] font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100" asChild>
                 <Link href="/contact-us">Contact Us</Link>
               </Button>
             </NavigationMenuItem>
@@ -183,40 +148,25 @@ export default function Header() {
           </SheetTrigger>
           <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
             <SheetHeader className="p-6 border-b">
-              <SheetTitle className="flex items-center justify-between">
-                Menu
-              </SheetTitle>
+              <SheetTitle className="flex items-center justify-between">Menu</SheetTitle>
             </SheetHeader>
             <div className="py-4">
               <nav className="flex flex-col">
-                <Link
-                  href="/"
-                  className="px-6 py-3 text-gray-700 hover:bg-gray-100"
-                  onClick={closeSheet}
-                >
+                <Link href="/home" className="px-6 py-3 text-gray-700 hover:bg-gray-100" onClick={closeSheet}>
                   Home
                 </Link>
-                <Link
-                  href="/about-us"
-                  className="px-6 py-3 text-gray-700 hover:bg-gray-100"
-                  onClick={closeSheet}
-                >
+                <Link href="/about-us" className="px-6 py-3 text-gray-700 hover:bg-gray-100" onClick={closeSheet}>
                   About Us
                 </Link>
 
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="services" className="border-none">
-                    <AccordionTrigger className="px-6 py-3 text-gray-700 hover:bg-gray-100 hover:no-underline">
+                    <AccordionTrigger className="px-6 py-3 text-gray-700 hover:bg-gray-100 hover:no-underline normal-case">
                       Services
                     </AccordionTrigger>
                     <AccordionContent className="bg-gray-50">
                       {services.map((service) => (
-                        <Link
-                          key={service.title}
-                          href={service.href}
-                          className="flex items-center gap-2 px-8 py-3 text-gray-700 hover:bg-gray-100"
-                          onClick={closeSheet}
-                        >
+                        <Link key={service.title} href={service.href} className="flex items-center gap-2 px-8 py-3 text-gray-700 hover:bg-gray-100" onClick={closeSheet}>
                           <span>{service.title}</span>
                         </Link>
                       ))}
@@ -224,17 +174,12 @@ export default function Header() {
                   </AccordionItem>
 
                   <AccordionItem value="partners" className="border-none">
-                    <AccordionTrigger className="px-6 py-3 text-gray-700 hover:bg-gray-100 hover:no-underline">
+                    <AccordionTrigger className="px-6 py-3 text-gray-700 hover:bg-gray-100 hover:no-underline normal-case">
                       Partners
                     </AccordionTrigger>
                     <AccordionContent className="bg-gray-50">
                       {partners.map((partner) => (
-                        <Link
-                          key={partner.title}
-                          href={partner.href}
-                          className="flex items-center gap-2 px-8 py-3 text-gray-700 hover:bg-gray-100"
-                          onClick={closeSheet}
-                        >
+                        <Link key={partner.title} href={partner.href} className="flex items-center gap-2 px-8 py-3 text-gray-700 hover:bg-gray-100" onClick={closeSheet}>
                           <span>{partner.title}</span>
                         </Link>
                       ))}
@@ -242,11 +187,12 @@ export default function Header() {
                   </AccordionItem>
                 </Accordion>
 
-                <Link
-                  href="/contact-us"
-                  className="px-6 py-3 text-gray-700 hover:bg-gray-100"
-                  onClick={closeSheet}
-                >
+                {/* ✅ Mobile Philippine Real Estate Inventory Link */}
+                <Link href="/philippinerealestateinventory" className="px-6 py-3 text-gray-700 hover:bg-gray-100" onClick={closeSheet}>
+                  Philippine Real Estate Inventory
+                </Link>
+
+                <Link href="/contact-us" className="px-6 py-3 text-gray-700 hover:bg-gray-100" onClick={closeSheet}>
                   Contact Us
                 </Link>
               </nav>

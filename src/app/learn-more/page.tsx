@@ -25,11 +25,7 @@ const formSchema = z.object({
     .min(7, { message: "Phone number must be at least 7 digits." })
     .regex(/^[0-9+\-() ]+$/, { message: "Invalid phone number." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  announcement: z.literal(true, {
-    errorMap: () => ({
-      message: "You must agree to be added to the announcement channel.",
-    }),
-  }),
+  announcement: z.boolean().optional(), // ✅ made optional
 });
 
 export default function LearnMore() {
@@ -41,7 +37,7 @@ export default function LearnMore() {
       position: "",
       phone: "",
       email: "",
-      announcement: true,
+      announcement: false,
     },
   });
 
@@ -52,7 +48,9 @@ export default function LearnMore() {
       body: JSON.stringify(values),
     });
     if (res.ok) {
-      toast.success("Thank you! We'll be in touch.");
+      toast.success(
+        "Thank you! A representative from Empyrean will be in touch."
+      );
     } else {
       toast.error("Something went wrong. Please try again.");
     }
@@ -65,26 +63,31 @@ export default function LearnMore() {
         <h1 className="font-bold text-3xl text-center mb-4">
           WE ARE CENTRALISING REAL ESTATE.
         </h1>
-        <p className="text-center max-w-3xl mb-8">
+        <p className="text-sm text-center max-w-3xl mb-8">
           ...and we&apos;d like you to be part of it. Whether you&apos;re an
           independent broker, working as an agent, a developer representative,
           real estate firm, or any business related to real estate and providing
           a home, any business, big or small. We&apos;d like you to join us.
         </p>
-        <section className="border border-gray-300 rounded-2xl p-6 mb-8 max-w-3xl w-full bg-gray-50">
-          <div className="flex items-center gap-4">
-            <div className="bg-gray-200 rounded-full relative min-w-[60px] h-[60px]"></div>
-            <div className="absolute text-xl font-bold uppercase">
-              LET US REACH YOU.
+
+        <div className="border border-gray-300 rounded-2xl p-6 max-w-3xl w-full bg-white mb-6">
+          <div className="flex items-center gap-4 mb-2">
+            <div className="relative min-w-[60px] h-[60px]">
+              <div className="bg-gray-200 rounded-full w-full h-full"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-y-1/2 translate-x-0 text-xl font-bold uppercase whitespace-nowrap">
+                LET US REACH YOU.
+              </div>
             </div>
           </div>
-          <div className="text-sm">
+          <div className="text-sm text-left">
             Kindly send us your information for our contacting. By providing
             your contact details, you allow us to use your information for
             legitimate purposes and initiatives by Empyrean such as being added
             to our network for further contacting or partnerships.
           </div>
-        </section>
+        </div>
+
+        {/* Contact Form Box */}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -170,12 +173,11 @@ export default function LearnMore() {
                       className="w-5 h-5 mr-2 accent-gray-700"
                       checked={field.value}
                       onChange={field.onChange}
-                      required
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
-                    I&apos;D LIKE TO BE ADDED TO THE OFFICIAL ANNOUNCEMENT
-                    CHANNEL OF EMPYREAN GROUP OF PARTNERS
+                    I&apos;d like to be added to the official announcement
+                    channel of Empyrean Group of Partners.
                   </FormLabel>
                   <FormMessage />
                 </FormItem>

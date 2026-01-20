@@ -5,11 +5,11 @@ import Marquee from "@/components/Marquee";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Developer Services | Empyrean - Real Estate Development Partners",
+  title: "Developer Partnership | Empyrean Real Estate Solutions",
   description:
     "Partner with Empyrean for real estate development. We work with leading developers including Shangri-La, APMC, SMDC, Ayala Land, and more to bring quality properties to market.",
   openGraph: {
-    title: "Developer Services | Empyrean - Real Estate Development Partners",
+    title: "Developer Partnership | Empyrean Real Estate Solutions",
     description:
       "Connect with Empyrean's network of premium real estate developers. We partner with industry leaders to deliver exceptional properties and development opportunities.",
     type: "website",
@@ -21,10 +21,6 @@ export default function BrokerAgentDeveloperPage() {
     {
       name: "Shangri-La",
       image: "/assets/partners/shang.png",
-    },
-    {
-      name: "APMC",
-      image: "/assets/partners/apmc.png",
     },
     {
       name: "SMDC",
@@ -56,9 +52,16 @@ export default function BrokerAgentDeveloperPage() {
     <main className="min-h-[calc(100vh-6rem)] flex flex-col">
       <div className="container mx-auto px-4 py-16 max-w-5xl">
         <section className="mb-20" aria-label="Developer Partners">
-          <h1 className="text-2xl font-bold text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">
             OUR DEVELOPER PARTNERS
           </h1>
+
+          <p className="text-[14px] md:text-lg text-center mb-16 max-w-4xl mx-auto">
+            To help our in-house sellers, we also accredit and partner with
+            several developers to offer our clients explore project selling and
+            direct resale and leasing from developers on ready-for-occupancy
+            (RFO) units.
+          </p>
 
           <Marquee speed={50}>
             {partners.map((partner) => (
@@ -79,7 +82,7 @@ export default function BrokerAgentDeveloperPage() {
             asChild
             className="bg-[#494949] hover:bg-[#494949]/80 text-white rounded-full py-6 px-12"
           >
-            <Link href="/contact-us">PARTNER WITH US TODAY!!</Link>
+            <Link href="/contact-us">Connect with us</Link>
           </Button>
         </div>
       </div>
